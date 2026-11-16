@@ -1,0 +1,2278 @@
+{
+  "pages": [
+    {
+      "n": "Indicadores",
+      "w": 1720,
+      "h": 3500,
+      "bg": "#fff",
+      "pf": null,
+      "v": [
+        {
+          "x": 0,
+          "y": 100,
+          "w": 1720,
+          "h": 35,
+          "z": 2000,
+          "sh": false,
+          "t": "line"
+        },
+        {
+          "x": 50,
+          "y": 59,
+          "w": 157,
+          "h": 57,
+          "z": 3000,
+          "sh": false,
+          "t": "text",
+          "tx": "Visão Geral",
+          "sz": 20.0,
+          "c": "#006a4e",
+          "al": "left"
+        },
+        {
+          "x": 16,
+          "y": 225,
+          "w": 284,
+          "h": 70,
+          "z": 4000,
+          "sh": false,
+          "t": "sl",
+          "f": "Transp BI",
+          "l": "Transportadora"
+        },
+        {
+          "x": 1400,
+          "y": 0,
+          "w": 320,
+          "h": 118,
+          "z": 5000,
+          "sh": false,
+          "t": "img"
+        },
+        {
+          "x": 16,
+          "y": 388,
+          "w": 284,
+          "h": 70,
+          "z": 6000,
+          "sh": false,
+          "t": "sl",
+          "f": "Zona Prioridade",
+          "l": "Zona Prioridade"
+        },
+        {
+          "x": 16,
+          "y": 560,
+          "w": 284,
+          "h": 150,
+          "z": 7000,
+          "sh": true,
+          "t": "card",
+          "m": "ClientesDia",
+          "l": "Clientes Atendidos",
+          "c": "#006440",
+          "cc": null
+        },
+        {
+          "x": 1021,
+          "y": 741,
+          "w": 677,
+          "h": 309,
+          "z": 9000,
+          "sh": true,
+          "t": "ch",
+          "k": "combo",
+          "ttl": "On Time por dia",
+          "cat": "Dia Itinerário",
+          "ym": "On time",
+          "ym2": "Aderência",
+          "ax": [
+            null,
+            null,
+            0.4,
+            1.0
+          ],
+          "out": false
+        },
+        {
+          "x": 16,
+          "y": 305,
+          "w": 284,
+          "h": 70,
+          "z": 11000,
+          "sh": false,
+          "t": "sl",
+          "f": "SEGMENTO",
+          "l": "Segmento"
+        },
+        {
+          "x": 353,
+          "y": 741,
+          "w": 642,
+          "h": 308,
+          "z": 13000,
+          "sh": true,
+          "t": "ch",
+          "k": "combo",
+          "ttl": "Semana",
+          "cat": "Semana do Mês",
+          "ym": "On time",
+          "ym2": "Aderência",
+          "ax": [
+            0.0,
+            1.2,
+            0.0,
+            1.1
+          ],
+          "out": false
+        },
+        {
+          "x": 0,
+          "y": 19,
+          "w": 1720,
+          "h": 81,
+          "z": 14000,
+          "sh": false,
+          "t": "text",
+          "tx": "TRANSPORTADORA",
+          "sz": 40.0,
+          "c": "#006a4e",
+          "al": "center"
+        },
+        {
+          "x": 16,
+          "y": 135,
+          "w": 284,
+          "h": 74,
+          "z": 16000,
+          "sh": false,
+          "t": "sl",
+          "f": "DATA_ITINERARIO",
+          "l": "Data"
+        },
+        {
+          "x": 16,
+          "y": 465,
+          "w": 284,
+          "h": 70,
+          "z": 17000,
+          "sh": false,
+          "t": "sl",
+          "f": "DESCRICAO_REDE",
+          "l": "Bandeira"
+        },
+        {
+          "x": 13,
+          "y": 1090,
+          "w": 1686,
+          "h": 277,
+          "z": 18000,
+          "sh": true,
+          "t": "ch",
+          "k": "combo",
+          "ttl": "Volumetria ",
+          "cat": "H",
+          "ym": "Volumetria",
+          "ym2": null,
+          "ax": [
+            null,
+            null,
+            0.0,
+            1.0
+          ],
+          "out": false
+        },
+        {
+          "x": 13,
+          "y": 1384,
+          "w": 1686,
+          "h": 264,
+          "z": 19000,
+          "sh": true,
+          "t": "ch",
+          "k": "combo",
+          "ttl": "Clientes Atendidos",
+          "cat": "H",
+          "ym": "Entregas",
+          "ym2": null,
+          "ax": [
+            null,
+            null,
+            0.0,
+            1.0
+          ],
+          "out": false
+        },
+        {
+          "x": 1306,
+          "y": 140,
+          "w": 300,
+          "h": 248,
+          "z": 19999,
+          "t": "box"
+        },
+        {
+          "x": 13,
+          "y": 743,
+          "w": 287,
+          "h": 307,
+          "z": 23000,
+          "sh": true,
+          "t": "tb",
+          "cols": [
+            [
+              "Zona Prioridade",
+              "Operação",
+              false
+            ],
+            [
+              "Aderência",
+              "Aderência",
+              true
+            ],
+            [
+              "On time",
+              "On time",
+              true
+            ]
+          ],
+          "so": "On time",
+          "sd": "Descending",
+          "fs": 10.0
+        },
+        {
+          "x": 810,
+          "y": 289,
+          "w": 150,
+          "h": 100,
+          "z": 102000,
+          "sh": false,
+          "t": "card",
+          "m": "No Prazo",
+          "l": "Dentro On Time",
+          "c": "#006a4e",
+          "cc": null
+        },
+        {
+          "x": 810,
+          "y": 140,
+          "w": 300,
+          "h": 150,
+          "z": 103000,
+          "sh": false,
+          "t": "card",
+          "m": "On time",
+          "l": "On time",
+          "c": null,
+          "cc": [
+            [
+              [
+                [
+                  2,
+                  0.88
+                ]
+              ],
+              "#006A4E"
+            ],
+            [
+              [
+                [
+                  2,
+                  0.0
+                ],
+                [
+                  3,
+                  0.88
+                ]
+              ],
+              "#D64550"
+            ]
+          ]
+        },
+        {
+          "x": 1306,
+          "y": 288,
+          "w": 150,
+          "h": 100,
+          "z": 104000,
+          "sh": false,
+          "t": "card",
+          "m": "Total NFs",
+          "l": "Total NFs",
+          "c": "#006a4e",
+          "cc": null
+        },
+        {
+          "x": 332,
+          "y": 289,
+          "w": 150,
+          "h": 100,
+          "z": 111000,
+          "sh": false,
+          "t": "card",
+          "m": "OkComZERO",
+          "l": "Aderente",
+          "c": "#006a4e",
+          "cc": null
+        },
+        {
+          "x": 482,
+          "y": 289,
+          "w": 150,
+          "h": 100,
+          "z": 112000,
+          "sh": false,
+          "t": "card",
+          "m": "NOK",
+          "l": "Não Aderente",
+          "c": "#D64550",
+          "cc": null
+        },
+        {
+          "x": 332,
+          "y": 140,
+          "w": 300,
+          "h": 150,
+          "z": 113000,
+          "sh": false,
+          "t": "card",
+          "m": "AderênciaComZero",
+          "l": "Aderência",
+          "c": null,
+          "cc": [
+            [
+              [
+                [
+                  2,
+                  0.95
+                ],
+                [
+                  4,
+                  1.0
+                ]
+              ],
+              "#006A4E"
+            ],
+            [
+              [
+                [
+                  2,
+                  0.0
+                ],
+                [
+                  3,
+                  0.95
+                ]
+              ],
+              "#D64550"
+            ]
+          ]
+        },
+        {
+          "x": 1456,
+          "y": 288,
+          "w": 150,
+          "h": 100,
+          "z": 114000,
+          "sh": false,
+          "t": "card",
+          "m": "SemApontComZero",
+          "l": "Sem Registro",
+          "c": "#D64550",
+          "cc": null
+        },
+        {
+          "x": 1306,
+          "y": 140,
+          "w": 300,
+          "h": 150,
+          "z": 122000,
+          "sh": false,
+          "t": "card",
+          "m": "Apontamento",
+          "l": "Apontamento",
+          "c": null,
+          "cc": [
+            [
+              [
+                [
+                  0,
+                  1.0
+                ]
+              ],
+              "#006A4E"
+            ],
+            [
+              [
+                [
+                  2,
+                  0.0
+                ],
+                [
+                  3,
+                  1.0
+                ]
+              ],
+              "#D64550"
+            ]
+          ]
+        },
+        {
+          "x": 960,
+          "y": 289,
+          "w": 150,
+          "h": 100,
+          "z": 129000,
+          "sh": false,
+          "t": "card",
+          "m": "Fora do prazo",
+          "l": "Total Fora",
+          "c": "#D64550",
+          "cc": null
+        },
+        {
+          "x": 313,
+          "y": 423,
+          "w": 1384,
+          "h": 300,
+          "z": 131000,
+          "sh": true,
+          "t": "ch",
+          "k": "combo",
+          "ttl": "On Time x Aderência",
+          "cat": "H",
+          "ym": "On time",
+          "ym2": "Aderência",
+          "ax": [
+            0.0,
+            1.3,
+            0.0,
+            1.2
+          ],
+          "out": false
+        }
+      ]
+    },
+    {
+      "n": "Apontamento",
+      "w": 1720,
+      "h": 1400,
+      "bg": "#f7f7f7",
+      "pf": "SEM APONTAMENTO",
+      "v": [
+        {
+          "x": 0,
+          "y": 100,
+          "w": 1720,
+          "h": 35,
+          "z": 2000,
+          "sh": false,
+          "t": "line"
+        },
+        {
+          "x": 50,
+          "y": 58,
+          "w": 250,
+          "h": 58,
+          "z": 3000,
+          "sh": false,
+          "t": "text",
+          "tx": "Apontamento",
+          "sz": 20.0,
+          "c": "#006a4e",
+          "al": "left"
+        },
+        {
+          "x": 16,
+          "y": 225,
+          "w": 284,
+          "h": 70,
+          "z": 4000,
+          "sh": false,
+          "t": "sl",
+          "f": "Transp BI",
+          "l": "Transportadora"
+        },
+        {
+          "x": 1400,
+          "y": 0,
+          "w": 320,
+          "h": 118,
+          "z": 5000,
+          "sh": false,
+          "t": "img"
+        },
+        {
+          "x": 17,
+          "y": 305,
+          "w": 283,
+          "h": 70,
+          "z": 6000,
+          "sh": false,
+          "t": "sl",
+          "f": "Zona Prioridade",
+          "l": "Zona Prioridade"
+        },
+        {
+          "x": 336,
+          "y": 160,
+          "w": 1361,
+          "h": 250,
+          "z": 7000,
+          "sh": true,
+          "t": "ch",
+          "k": "combo",
+          "ttl": "Pendências por dia",
+          "cat": "H",
+          "ym": "NFs em aberto",
+          "ym2": null,
+          "ax": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "out": false
+        },
+        {
+          "x": 813,
+          "y": 19,
+          "w": 193,
+          "h": 81,
+          "z": 8000,
+          "sh": false,
+          "t": "text",
+          "tx": "CD RJ",
+          "sz": 40.0,
+          "c": "#006a4e",
+          "al": "left"
+        },
+        {
+          "x": 16,
+          "y": 135,
+          "w": 284,
+          "h": 74,
+          "z": 9000,
+          "sh": false,
+          "t": "sl",
+          "f": "DATA_ITINERARIO",
+          "l": "Data"
+        },
+        {
+          "x": 336,
+          "y": 770,
+          "w": 1361,
+          "h": 287,
+          "z": 10000,
+          "sh": true,
+          "t": "tb",
+          "cols": [
+            [
+              "CODIGO",
+              "Itinerário",
+              false
+            ],
+            [
+              "TP BI",
+              "TP",
+              false
+            ],
+            [
+              "CODIGO_INTERNO_CLIENTE",
+              "Cod.",
+              false
+            ],
+            [
+              "CLIENTE",
+              "Razão Social",
+              false
+            ],
+            [
+              "COD_TRAJETO",
+              "Trajeto",
+              false
+            ],
+            [
+              "EMISSAO ABREVIADA",
+              "Emissão",
+              false
+            ],
+            [
+              "DOCUMENTO",
+              "Nota Fiscal",
+              false
+            ],
+            [
+              "VALOR",
+              "Valor NF",
+              false
+            ],
+            [
+              "DOCUMENTO_STATUS",
+              "Status",
+              false
+            ],
+            [
+              "ROTA",
+              "Minuta",
+              false
+            ]
+          ],
+          "so": "VALOR",
+          "sd": "Descending",
+          "fs": 13.0
+        },
+        {
+          "x": 16,
+          "y": 305,
+          "w": 284,
+          "h": 70,
+          "z": 11000,
+          "sh": false,
+          "t": "sl",
+          "f": "SEGMENTO",
+          "l": "Segmento"
+        },
+        {
+          "x": 19,
+          "y": 473,
+          "w": 284,
+          "h": 70,
+          "z": 12000,
+          "sh": false,
+          "t": "sl",
+          "f": "DESCRICAO_REDE",
+          "l": "Bandeira"
+        },
+        {
+          "x": 16,
+          "y": 566,
+          "w": 284,
+          "h": 150,
+          "z": 13000,
+          "sh": false,
+          "t": "card",
+          "m": "SemApontComZero",
+          "l": "Sem Registro",
+          "c": null,
+          "cc": [
+            [
+              [
+                [
+                  0,
+                  1.0
+                ]
+              ],
+              "#006A4E"
+            ],
+            [
+              [
+                [
+                  2,
+                  0.0
+                ],
+                [
+                  3,
+                  1.0
+                ]
+              ],
+              "#D64550"
+            ]
+          ]
+        },
+        {
+          "x": 16,
+          "y": 388,
+          "w": 284,
+          "h": 70,
+          "z": 14000,
+          "sh": false,
+          "t": "sl",
+          "f": "Zona Prioridade",
+          "l": "Zona Prioridade"
+        },
+        {
+          "x": 17,
+          "y": 731,
+          "w": 284,
+          "h": 150,
+          "z": 15000,
+          "sh": false,
+          "t": "card",
+          "m": "Valor aberto",
+          "l": "Valor em aberto",
+          "c": null,
+          "cc": [
+            [
+              [
+                [
+                  0,
+                  1.0
+                ]
+              ],
+              "#006A4E"
+            ],
+            [
+              [
+                [
+                  2,
+                  0.0
+                ],
+                [
+                  3,
+                  1.0
+                ]
+              ],
+              "#D64550"
+            ]
+          ]
+        },
+        {
+          "x": 325,
+          "y": 441,
+          "w": 1361,
+          "h": 250,
+          "z": 16000,
+          "sh": true,
+          "t": "ch",
+          "k": "combo",
+          "ttl": "Pendências por semana",
+          "cat": "Semana do mes txt",
+          "ym": "Valor aberto",
+          "ym2": null,
+          "ax": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "out": true
+        }
+      ]
+    },
+    {
+      "n": "Motoristas",
+      "w": 1720,
+      "h": 2000,
+      "bg": "#f7f7f7",
+      "pf": null,
+      "v": [
+        {
+          "x": 0,
+          "y": 100,
+          "w": 1720,
+          "h": 35,
+          "z": 2000,
+          "sh": false,
+          "t": "line"
+        },
+        {
+          "x": 50,
+          "y": 58,
+          "w": 272,
+          "h": 58,
+          "z": 3000,
+          "sh": false,
+          "t": "text",
+          "tx": "Transportador",
+          "sz": 20.0,
+          "c": "#006a4e",
+          "al": "left"
+        },
+        {
+          "x": 16,
+          "y": 225,
+          "w": 284,
+          "h": 70,
+          "z": 4000,
+          "sh": false,
+          "t": "sl",
+          "f": "Transp BI",
+          "l": "Transportadora"
+        },
+        {
+          "x": 1400,
+          "y": 0,
+          "w": 320,
+          "h": 118,
+          "z": 5000,
+          "sh": false,
+          "t": "img"
+        },
+        {
+          "x": 16,
+          "y": 388,
+          "w": 284,
+          "h": 70,
+          "z": 6000,
+          "sh": false,
+          "t": "sl",
+          "f": "Zona Prioridade",
+          "l": "Zona Prioridade"
+        },
+        {
+          "x": 16,
+          "y": 551,
+          "w": 284,
+          "h": 144,
+          "z": 7000,
+          "sh": true,
+          "t": "card",
+          "m": "ClientesDia",
+          "l": "Clientes Atendidos",
+          "c": "#006440",
+          "cc": null
+        },
+        {
+          "x": 16,
+          "y": 305,
+          "w": 284,
+          "h": 70,
+          "z": 9000,
+          "sh": false,
+          "t": "sl",
+          "f": "SEGMENTO",
+          "l": "Segmento"
+        },
+        {
+          "x": 813,
+          "y": 19,
+          "w": 193,
+          "h": 81,
+          "z": 10000,
+          "sh": false,
+          "t": "text",
+          "tx": "CD RJ",
+          "sz": 40.0,
+          "c": "#006a4e",
+          "al": "left"
+        },
+        {
+          "x": 16,
+          "y": 135,
+          "w": 284,
+          "h": 74,
+          "z": 11000,
+          "sh": false,
+          "t": "sl",
+          "f": "DATA_ITINERARIO",
+          "l": "Data"
+        },
+        {
+          "x": 16,
+          "y": 465,
+          "w": 284,
+          "h": 70,
+          "z": 12000,
+          "sh": false,
+          "t": "sl",
+          "f": "DESCRICAO_REDE",
+          "l": "Bandeira"
+        },
+        {
+          "x": 982,
+          "y": 712,
+          "w": 730,
+          "h": 426,
+          "z": 14000,
+          "sh": true,
+          "t": "tb",
+          "cols": [
+            [
+              "TP BI",
+              "TP",
+              false
+            ],
+            [
+              "CIDADE",
+              "Cidade",
+              false
+            ],
+            [
+              "REDE_CLIENTE",
+              "REDE_CLIENTE",
+              false
+            ],
+            [
+              "Total NFs",
+              "Total NFs",
+              true
+            ],
+            [
+              "OK",
+              "Dentro",
+              true
+            ],
+            [
+              "Total fora",
+              "Fora",
+              true
+            ],
+            [
+              "Aderência",
+              "Aderência",
+              true
+            ],
+            [
+              "No Prazo",
+              "Dentro",
+              true
+            ],
+            [
+              "Fora do prazo",
+              "Fora",
+              true
+            ],
+            [
+              "On time",
+              "On time",
+              true
+            ]
+          ],
+          "so": "CIDADE",
+          "sd": "Descending",
+          "fs": 10.0
+        },
+        {
+          "x": 0,
+          "y": 712,
+          "w": 952,
+          "h": 426,
+          "z": 16002,
+          "sh": true,
+          "t": "tb",
+          "cols": [
+            [
+              "Transp BI",
+              "Transp",
+              false
+            ],
+            [
+              "NOME_MOTORISTA",
+              "Motorista",
+              false
+            ],
+            [
+              "Total NFs",
+              "Total NFs",
+              true
+            ],
+            [
+              "No Prazo",
+              "Dentro",
+              true
+            ],
+            [
+              "Fora do prazo",
+              "Fora",
+              true
+            ],
+            [
+              "On time",
+              "On time",
+              true
+            ],
+            [
+              "OK",
+              "Dentro",
+              true
+            ],
+            [
+              "Total fora",
+              "Fora",
+              true
+            ],
+            [
+              "Aderência",
+              "Aderência",
+              true
+            ],
+            [
+              "Raio NOK",
+              "Raio NOK",
+              true
+            ],
+            [
+              "Impacto Aderência",
+              "Impacto Aderência",
+              true
+            ]
+          ],
+          "so": "Aderência",
+          "sd": "Ascending",
+          "fs": 10.0
+        },
+        {
+          "x": 332,
+          "y": 142,
+          "w": 1380,
+          "h": 220,
+          "z": 131000,
+          "sh": true,
+          "t": "ch",
+          "k": "col",
+          "ttl": "TOP 15 - Motoristas  Ofensores On Time",
+          "cat": "NOME_MOTORISTA",
+          "ym": "Fora do prazo",
+          "ym2": null,
+          "ax": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "out": false
+        },
+        {
+          "x": 332,
+          "y": 365,
+          "w": 1380,
+          "h": 219,
+          "z": 131000,
+          "sh": true,
+          "t": "ch",
+          "k": "col",
+          "ttl": "TOP 15 - Motoristas Ofensores Aderência",
+          "cat": "NOME_MOTORISTA",
+          "ym": "Total fora",
+          "ym2": null,
+          "ax": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "out": false
+        }
+      ]
+    },
+    {
+      "n": "Viagens",
+      "w": 1720,
+      "h": 2000,
+      "bg": "#f7f7f7",
+      "pf": null,
+      "v": [
+        {
+          "x": 12,
+          "y": 145,
+          "w": 284,
+          "h": 73,
+          "z": 2000,
+          "sh": false,
+          "t": "sl",
+          "f": "DATA_ITINERARIO",
+          "l": "Data"
+        },
+        {
+          "x": 948,
+          "y": 827,
+          "w": 752,
+          "h": 304,
+          "z": 3000,
+          "sh": true,
+          "t": "tb",
+          "cols": [
+            [
+              "TP BI",
+              "TP",
+              false
+            ],
+            [
+              "CIDADE",
+              "Cidade",
+              false
+            ],
+            [
+              "REDE_CLIENTE",
+              "REDE_CLIENTE",
+              false
+            ],
+            [
+              "Total NFs",
+              "Total NFs",
+              true
+            ],
+            [
+              "OK",
+              "Dentro",
+              true
+            ],
+            [
+              "Total fora",
+              "Fora",
+              true
+            ],
+            [
+              "Aderência",
+              "Aderência",
+              true
+            ],
+            [
+              "No Prazo",
+              "Dentro",
+              true
+            ],
+            [
+              "Fora do prazo",
+              "Fora",
+              true
+            ],
+            [
+              "On time",
+              "On time",
+              true
+            ]
+          ],
+          "so": "CIDADE",
+          "sd": "Ascending",
+          "fs": 10.0
+        },
+        {
+          "x": 724,
+          "y": 170,
+          "w": 300,
+          "h": 150,
+          "z": 4000,
+          "sh": false,
+          "t": "card",
+          "m": "On time",
+          "l": "On time",
+          "c": null,
+          "cc": [
+            [
+              [
+                [
+                  2,
+                  0.88
+                ],
+                [
+                  4,
+                  1.0
+                ]
+              ],
+              "#006A4E"
+            ],
+            [
+              [
+                [
+                  2,
+                  0.0
+                ],
+                [
+                  3,
+                  0.88
+                ]
+              ],
+              "#D64550"
+            ]
+          ]
+        },
+        {
+          "x": 1456,
+          "y": 219,
+          "w": 234,
+          "h": 150,
+          "z": 5000,
+          "sh": true,
+          "t": "card",
+          "m": "ClientesDia",
+          "l": "Clientes Atendidos",
+          "c": "#006A4E",
+          "cc": null
+        },
+        {
+          "x": 0,
+          "y": 100,
+          "w": 1720,
+          "h": 35,
+          "z": 7000,
+          "sh": false,
+          "t": "line"
+        },
+        {
+          "x": 50,
+          "y": 59,
+          "w": 157,
+          "h": 57,
+          "z": 8000,
+          "sh": false,
+          "t": "text",
+          "tx": "Rede",
+          "sz": 20.0,
+          "c": "#006a4e",
+          "al": "left"
+        },
+        {
+          "x": 1400,
+          "y": 0,
+          "w": 320,
+          "h": 118,
+          "z": 9000,
+          "sh": false,
+          "t": "img"
+        },
+        {
+          "x": 813,
+          "y": 19,
+          "w": 193,
+          "h": 81,
+          "z": 10000,
+          "sh": false,
+          "t": "text",
+          "tx": "CD RJ",
+          "sz": 40.0,
+          "c": "#006a4e",
+          "al": "left"
+        },
+        {
+          "x": 1075,
+          "y": 171,
+          "w": 300,
+          "h": 250,
+          "z": 10999,
+          "t": "box"
+        },
+        {
+          "x": 12,
+          "y": 224,
+          "w": 284,
+          "h": 70,
+          "z": 13000,
+          "sh": false,
+          "t": "sl",
+          "f": "Transp BI",
+          "l": "Transportadora"
+        },
+        {
+          "x": 12,
+          "y": 304,
+          "w": 284,
+          "h": 70,
+          "z": 14000,
+          "sh": false,
+          "t": "sl",
+          "f": "SEGMENTO",
+          "l": "Segmento"
+        },
+        {
+          "x": 12,
+          "y": 386,
+          "w": 284,
+          "h": 70,
+          "z": 15000,
+          "sh": false,
+          "t": "sl",
+          "f": "Zona Prioridade",
+          "l": "Zona Prioridade"
+        },
+        {
+          "x": 948,
+          "y": 1162,
+          "w": 753,
+          "h": 550,
+          "z": 16000,
+          "sh": true,
+          "t": "tb",
+          "cols": [
+            [
+              "CODIGO_INTERNO_CLIENTE",
+              "Cód",
+              false
+            ],
+            [
+              "CLIENTE",
+              "Razão",
+              false
+            ],
+            [
+              "COD_TRAJETO",
+              "Rota",
+              false
+            ],
+            [
+              "Total NFs",
+              "Total NFs",
+              true
+            ],
+            [
+              "No Prazo",
+              "Dentro",
+              true
+            ],
+            [
+              "Fora do prazo",
+              "Fora",
+              true
+            ],
+            [
+              "On time",
+              "On time",
+              true
+            ],
+            [
+              "OK",
+              "Dentro",
+              true
+            ],
+            [
+              "Total fora",
+              "Fora",
+              true
+            ],
+            [
+              "Aderência",
+              "Aderência",
+              true
+            ],
+            [
+              "HORA_OCORRENCIA",
+              "Hora",
+              false
+            ]
+          ],
+          "so": "COD_TRAJETO",
+          "sd": "Descending",
+          "fs": 10.0
+        },
+        {
+          "x": 9,
+          "y": 1284,
+          "w": 923,
+          "h": 427,
+          "z": 17000,
+          "sh": true,
+          "t": "tb",
+          "cols": [
+            [
+              "Transp BI",
+              "Transp",
+              false
+            ],
+            [
+              "DATA_ROTA",
+              "Dt Frete",
+              false
+            ],
+            [
+              "ROTA",
+              "Rota",
+              false
+            ],
+            [
+              "PLACA",
+              "Placa",
+              false
+            ],
+            [
+              "NOME_MOTORISTA",
+              "Motorista",
+              false
+            ],
+            [
+              "Total NFs",
+              "Total NFs",
+              true
+            ],
+            [
+              "No Prazo",
+              "Dentro",
+              true
+            ],
+            [
+              "Fora do prazo",
+              "Fora",
+              true
+            ],
+            [
+              "On time",
+              "On time",
+              true
+            ],
+            [
+              "OK",
+              "Dentro",
+              true
+            ],
+            [
+              "Total fora",
+              "Fora",
+              true
+            ],
+            [
+              "Aderência",
+              "Aderência",
+              true
+            ]
+          ],
+          "so": "On time",
+          "sd": "Ascending",
+          "fs": 10.0
+        },
+        {
+          "x": 9,
+          "y": 826,
+          "w": 923,
+          "h": 427,
+          "z": 18000,
+          "sh": true,
+          "t": "tb",
+          "cols": [
+            [
+              "Transp BI",
+              "Transp",
+              false
+            ],
+            [
+              "NOME_MOTORISTA",
+              "Motorista",
+              false
+            ],
+            [
+              "Total NFs",
+              "Total NFs",
+              true
+            ],
+            [
+              "No Prazo",
+              "Dentro",
+              true
+            ],
+            [
+              "Fora do prazo",
+              "Fora",
+              true
+            ],
+            [
+              "On time",
+              "On time",
+              true
+            ],
+            [
+              "OK",
+              "Dentro",
+              true
+            ],
+            [
+              "Total fora",
+              "Fora",
+              true
+            ],
+            [
+              "Aderência",
+              "Aderência",
+              true
+            ],
+            [
+              "Raio NOK",
+              "Raio NOK",
+              true
+            ],
+            [
+              "Impacto Aderência",
+              "Impacto Aderência",
+              true
+            ]
+          ],
+          "so": "On time",
+          "sd": "Ascending",
+          "fs": 10.0
+        },
+        {
+          "x": 12,
+          "y": 464,
+          "w": 284,
+          "h": 70,
+          "z": 20000,
+          "sh": false,
+          "t": "sl",
+          "f": "DESCRICAO_REDE",
+          "l": "Bandeira"
+        },
+        {
+          "x": 724,
+          "y": 319,
+          "w": 150,
+          "h": 100,
+          "z": 102000,
+          "sh": false,
+          "t": "card",
+          "m": "No Prazo",
+          "l": "Dentro On Time",
+          "c": "#006a4e",
+          "cc": null
+        },
+        {
+          "x": 1075,
+          "y": 319,
+          "w": 150,
+          "h": 100,
+          "z": 104000,
+          "sh": false,
+          "t": "card",
+          "m": "Total NFs",
+          "l": "Total NFs",
+          "c": "#006a4e",
+          "cc": null
+        },
+        {
+          "x": 374,
+          "y": 319,
+          "w": 150,
+          "h": 100,
+          "z": 111000,
+          "sh": false,
+          "t": "card",
+          "m": "OkComZERO",
+          "l": "Aderente",
+          "c": "#006a4e",
+          "cc": null
+        },
+        {
+          "x": 524,
+          "y": 319,
+          "w": 150,
+          "h": 100,
+          "z": 112000,
+          "sh": false,
+          "t": "card",
+          "m": "NOK",
+          "l": "Não Aderente",
+          "c": "#D64550",
+          "cc": null
+        },
+        {
+          "x": 374,
+          "y": 170,
+          "w": 300,
+          "h": 150,
+          "z": 113000,
+          "sh": false,
+          "t": "card",
+          "m": "AderênciaComZero",
+          "l": "Aderência",
+          "c": null,
+          "cc": [
+            [
+              [
+                [
+                  2,
+                  0.95
+                ],
+                [
+                  4,
+                  1.0
+                ]
+              ],
+              "#006A4E"
+            ],
+            [
+              [
+                [
+                  2,
+                  0.0
+                ],
+                [
+                  3,
+                  0.95
+                ]
+              ],
+              "#D64550"
+            ]
+          ]
+        },
+        {
+          "x": 1225,
+          "y": 319,
+          "w": 150,
+          "h": 100,
+          "z": 114000,
+          "sh": false,
+          "t": "card",
+          "m": "SemApontComZero",
+          "l": "Sem Registro",
+          "c": "#D64550",
+          "cc": null
+        },
+        {
+          "x": 1075,
+          "y": 171,
+          "w": 300,
+          "h": 150,
+          "z": 122000,
+          "sh": false,
+          "t": "card",
+          "m": "Apontamento",
+          "l": "Apontamento",
+          "c": null,
+          "cc": [
+            [
+              [
+                [
+                  0,
+                  1.0
+                ]
+              ],
+              "#006A4E"
+            ],
+            [
+              [
+                [
+                  2,
+                  0.0
+                ],
+                [
+                  3,
+                  1.0
+                ]
+              ],
+              "#D64550"
+            ]
+          ]
+        },
+        {
+          "x": 874,
+          "y": 319,
+          "w": 150,
+          "h": 100,
+          "z": 129000,
+          "sh": false,
+          "t": "card",
+          "m": "Fora do prazo",
+          "l": "Total Fora",
+          "c": "#D64550",
+          "cc": null
+        },
+        {
+          "x": 9,
+          "y": 549,
+          "w": 1702,
+          "h": 265,
+          "z": 131000,
+          "sh": true,
+          "t": "ch",
+          "k": "combo",
+          "ttl": "On Time",
+          "cat": "H",
+          "ym": "On time",
+          "ym2": "Aderência",
+          "ax": [
+            0.0,
+            1.3,
+            0.0,
+            1.2
+          ],
+          "out": false
+        }
+      ]
+    },
+    {
+      "n": "Cliente",
+      "w": 1720,
+      "h": 2000,
+      "bg": "#f7f7f7",
+      "pf": null,
+      "v": [
+        {
+          "x": 11,
+          "y": 827,
+          "w": 957,
+          "h": 703,
+          "z": 2000,
+          "sh": true,
+          "t": "tb",
+          "cols": [
+            [
+              "TP BI",
+              "TP",
+              false
+            ],
+            [
+              "CODIGO_INTERNO_CLIENTE",
+              "Cod",
+              false
+            ],
+            [
+              "CLIENTE",
+              "Cliente",
+              false
+            ],
+            [
+              "COD_TRAJETO",
+              "Rota",
+              false
+            ],
+            [
+              "Total NFs",
+              "Total NFs",
+              true
+            ],
+            [
+              "No Prazo",
+              "Dentro",
+              true
+            ],
+            [
+              "Fora do prazo",
+              "Fora",
+              true
+            ],
+            [
+              "Aderência",
+              "Aderência",
+              true
+            ],
+            [
+              "On time",
+              "On time",
+              true
+            ]
+          ],
+          "so": "Aderência",
+          "sd": "Ascending",
+          "fs": 13.0
+        },
+        {
+          "x": 8,
+          "y": 145,
+          "w": 292,
+          "h": 73,
+          "z": 3000,
+          "sh": false,
+          "t": "sl",
+          "f": "DATA_ITINERARIO",
+          "l": "Data"
+        },
+        {
+          "x": 982,
+          "y": 827,
+          "w": 728,
+          "h": 352,
+          "z": 4000,
+          "sh": true,
+          "t": "tb",
+          "cols": [
+            [
+              "TP BI",
+              "TP",
+              false
+            ],
+            [
+              "CIDADE",
+              "Cidade",
+              false
+            ],
+            [
+              "REDE_CLIENTE",
+              "REDE_CLIENTE",
+              false
+            ],
+            [
+              "Total NFs",
+              "Total NFs",
+              true
+            ],
+            [
+              "OK",
+              "Dentro",
+              true
+            ],
+            [
+              "Total fora",
+              "Fora",
+              true
+            ],
+            [
+              "Aderência",
+              "Aderência",
+              true
+            ],
+            [
+              "No Prazo",
+              "Dentro",
+              true
+            ],
+            [
+              "Fora do prazo",
+              "Fora",
+              true
+            ],
+            [
+              "On time",
+              "On time",
+              true
+            ]
+          ],
+          "so": "REDE_CLIENTE",
+          "sd": "Ascending",
+          "fs": 10.0
+        },
+        {
+          "x": 1442,
+          "y": 140,
+          "w": 234,
+          "h": 150,
+          "z": 5000,
+          "sh": true,
+          "t": "card",
+          "m": "ClientesDia",
+          "l": "Clientes Atendidos",
+          "c": "#006A4E",
+          "cc": null
+        },
+        {
+          "x": 982,
+          "y": 1195,
+          "w": 728,
+          "h": 335,
+          "z": 6000,
+          "sh": true,
+          "t": "tb",
+          "cols": [
+            [
+              "REDE CONCAT",
+              "Rede",
+              false
+            ],
+            [
+              "Total NFs",
+              "Total NFs",
+              true
+            ],
+            [
+              "Aderência",
+              "Aderência",
+              true
+            ],
+            [
+              "On time",
+              "On time",
+              true
+            ]
+          ],
+          "so": "Total NFs",
+          "sd": "Descending",
+          "fs": 13.0
+        },
+        {
+          "x": 0,
+          "y": 100,
+          "w": 1720,
+          "h": 35,
+          "z": 8000,
+          "sh": false,
+          "t": "line"
+        },
+        {
+          "x": 50,
+          "y": 59,
+          "w": 157,
+          "h": 57,
+          "z": 9000,
+          "sh": false,
+          "t": "text",
+          "tx": "Rede",
+          "sz": 20.0,
+          "c": "#006a4e",
+          "al": "left"
+        },
+        {
+          "x": 1400,
+          "y": 0,
+          "w": 320,
+          "h": 118,
+          "z": 10000,
+          "sh": false,
+          "t": "img"
+        },
+        {
+          "x": 813,
+          "y": 19,
+          "w": 193,
+          "h": 81,
+          "z": 11000,
+          "sh": false,
+          "t": "text",
+          "tx": "CD RJ",
+          "sz": 40.0,
+          "c": "#006a4e",
+          "al": "left"
+        },
+        {
+          "x": 13,
+          "y": 1547,
+          "w": 1697,
+          "h": 433,
+          "z": 12000,
+          "sh": true,
+          "t": "tb",
+          "cols": [
+            [
+              "CODIGO",
+              "CODIGO",
+              false
+            ],
+            [
+              "CODIGO_INTERNO_CLIENTE",
+              "Cod",
+              false
+            ],
+            [
+              "CLIENTE",
+              "Cliente",
+              false
+            ],
+            [
+              "DOCUMENTO",
+              "Nota Fiscal",
+              false
+            ],
+            [
+              "EMISSAO_DOCUMENTO",
+              "Emissão",
+              false
+            ],
+            [
+              "DOCUMENTO_STATUS",
+              "Status",
+              false
+            ],
+            [
+              "DATA_OCORRENCIA",
+              "Data Entrega",
+              false
+            ],
+            [
+              "HORA_OCORRENCIA",
+              "Hora Entrega",
+              false
+            ],
+            [
+              "ON_TIME",
+              "No Prazo",
+              false
+            ],
+            [
+              "DATA_SLA_META",
+              "Data SLA",
+              false
+            ],
+            [
+              "HORA_SLA_META",
+              "Hora SLA",
+              false
+            ],
+            [
+              "COD_TRAJETO",
+              "COD_TRAJETO",
+              false
+            ]
+          ],
+          "so": "HORA_OCORRENCIA",
+          "sd": "Descending",
+          "fs": 13.0
+        },
+        {
+          "x": 1094,
+          "y": 137,
+          "w": 300,
+          "h": 248,
+          "z": 12999,
+          "t": "box"
+        },
+        {
+          "x": 16,
+          "y": 225,
+          "w": 284,
+          "h": 70,
+          "z": 16000,
+          "sh": false,
+          "t": "sl",
+          "f": "Transp BI",
+          "l": "Transportadora"
+        },
+        {
+          "x": 16,
+          "y": 305,
+          "w": 284,
+          "h": 70,
+          "z": 17000,
+          "sh": false,
+          "t": "sl",
+          "f": "SEGMENTO",
+          "l": "Segmento"
+        },
+        {
+          "x": 16,
+          "y": 388,
+          "w": 284,
+          "h": 70,
+          "z": 18000,
+          "sh": false,
+          "t": "sl",
+          "f": "Zona Prioridade",
+          "l": "Zona Prioridade"
+        },
+        {
+          "x": 16,
+          "y": 473,
+          "w": 283,
+          "h": 84,
+          "z": 19000,
+          "sh": false,
+          "t": "sl",
+          "f": "REDE CONCAT",
+          "l": "Rede"
+        },
+        {
+          "x": 17,
+          "y": 550,
+          "w": 282,
+          "h": 83,
+          "z": 20000,
+          "sh": false,
+          "t": "sl",
+          "f": "CLIENTE CONCAT",
+          "l": "Cliente"
+        },
+        {
+          "x": 16,
+          "y": 465,
+          "w": 284,
+          "h": 70,
+          "z": 21000,
+          "sh": false,
+          "t": "sl",
+          "f": "DESCRICAO_REDE",
+          "l": "Bandeira"
+        },
+        {
+          "x": 18,
+          "y": 633,
+          "w": 282,
+          "h": 83,
+          "z": 22000,
+          "sh": false,
+          "t": "sl",
+          "f": "REDE CONCAT",
+          "l": "Rede"
+        },
+        {
+          "x": 744,
+          "y": 285,
+          "w": 150,
+          "h": 100,
+          "z": 102000,
+          "sh": false,
+          "t": "card",
+          "m": "No Prazo",
+          "l": "Dentro On Time",
+          "c": "#006a4e",
+          "cc": null
+        },
+        {
+          "x": 744,
+          "y": 136,
+          "w": 300,
+          "h": 150,
+          "z": 103000,
+          "sh": false,
+          "t": "card",
+          "m": "On time",
+          "l": "On time",
+          "c": null,
+          "cc": [
+            [
+              [
+                [
+                  2,
+                  0.95
+                ],
+                [
+                  4,
+                  1.0
+                ]
+              ],
+              "#006A4E"
+            ],
+            [
+              [
+                [
+                  2,
+                  0.0
+                ],
+                [
+                  3,
+                  0.95
+                ]
+              ],
+              "#D64550"
+            ]
+          ]
+        },
+        {
+          "x": 1094,
+          "y": 285,
+          "w": 150,
+          "h": 100,
+          "z": 104000,
+          "sh": false,
+          "t": "card",
+          "m": "Total NFs",
+          "l": "Total NFs",
+          "c": "#006a4e",
+          "cc": null
+        },
+        {
+          "x": 394,
+          "y": 285,
+          "w": 150,
+          "h": 100,
+          "z": 111000,
+          "sh": false,
+          "t": "card",
+          "m": "OkComZERO",
+          "l": "Aderente",
+          "c": "#006a4e",
+          "cc": null
+        },
+        {
+          "x": 544,
+          "y": 285,
+          "w": 150,
+          "h": 100,
+          "z": 112000,
+          "sh": false,
+          "t": "card",
+          "m": "NOK",
+          "l": "Não Aderente",
+          "c": "#D64550",
+          "cc": null
+        },
+        {
+          "x": 394,
+          "y": 136,
+          "w": 300,
+          "h": 150,
+          "z": 113000,
+          "sh": false,
+          "t": "card",
+          "m": "AderênciaComZero",
+          "l": "Aderência",
+          "c": null,
+          "cc": [
+            [
+              [
+                [
+                  2,
+                  0.95
+                ],
+                [
+                  4,
+                  1.0
+                ]
+              ],
+              "#006A4E"
+            ],
+            [
+              [
+                [
+                  2,
+                  0.0
+                ],
+                [
+                  3,
+                  0.95
+                ]
+              ],
+              "#D64550"
+            ]
+          ]
+        },
+        {
+          "x": 1244,
+          "y": 285,
+          "w": 150,
+          "h": 100,
+          "z": 114000,
+          "sh": false,
+          "t": "card",
+          "m": "SemApontComZero",
+          "l": "Sem Registro",
+          "c": "#D64550",
+          "cc": null
+        },
+        {
+          "x": 1094,
+          "y": 137,
+          "w": 300,
+          "h": 150,
+          "z": 122000,
+          "sh": false,
+          "t": "card",
+          "m": "Apontamento",
+          "l": "Apontamento",
+          "c": null,
+          "cc": [
+            [
+              [
+                [
+                  0,
+                  1.0
+                ]
+              ],
+              "#006A4E"
+            ],
+            [
+              [
+                [
+                  2,
+                  0.0
+                ],
+                [
+                  3,
+                  1.0
+                ]
+              ],
+              "#D64550"
+            ]
+          ]
+        },
+        {
+          "x": 894,
+          "y": 285,
+          "w": 150,
+          "h": 100,
+          "z": 129000,
+          "sh": false,
+          "t": "card",
+          "m": "Fora do prazo",
+          "l": "Total Fora",
+          "c": "#D64550",
+          "cc": null
+        },
+        {
+          "x": 314,
+          "y": 473,
+          "w": 1397,
+          "h": 320,
+          "z": 131000,
+          "sh": true,
+          "t": "ch",
+          "k": "combo",
+          "ttl": "On Time",
+          "cat": "H",
+          "ym": "On time",
+          "ym2": "Aderência",
+          "ax": [
+            0.0,
+            1.3,
+            0.0,
+            1.2
+          ],
+          "out": false
+        }
+      ]
+    }
+  ]
+}
