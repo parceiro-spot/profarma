@@ -6,7 +6,7 @@ Aplicação estática de teste inspirada nas páginas **Indicadores**, **Apontam
 
 Abra o Preview do projeto e use **Carregar planilhas** para selecionar um arquivo XLSX, XLS ou CSV. Os dados são lidos no navegador e armazenados no IndexedDB deste perfil até serem excluídos no painel de organização ou até os dados do site serem limpos. O dashboard não envia o arquivo a um servidor da aplicação; carregue planilhas apenas em um dispositivo/perfil autorizado. O IndexedDB local não é criptografado e não deve ser tratado como mecanismo de confidencialidade.
 
-Clique em um ponto de gráfico ou linha de tabela para cruzar a seleção; use **Limpar seleção** para removê-la. O intervalo inicial/final pode ser alterado manualmente. A engrenagem no canto superior abre as pastas mensais, permite ativar/desativar, mover ou excluir arquivos e baixar ZIP de um mês ou de todos os meses.
+Clique em um ponto de gráfico ou linha de tabela para cruzar a seleção; use **Limpar seleção** para removê-la. O intervalo inicial/final pode ser alterado manualmente. A engrenagem no canto superior abre as pastas mensais, permite visualizar, ativar/desativar ou excluir cada planilha individual e baixar cada mês como um único arquivo `.xlsx` formatado, com a aba `itineraries`.
 
 O filtro **Segmento** usa a coluna `SEGMENTO` da planilha quando disponível; na ausência dela, mantém a classificação provisória existente. Os slicers preservam valores vazios como **(Em branco)**. A lista de **Zona Prioridade** contempla Agendamento, Dist Baixada, Dist Zona Oeste, Dist Zona Sul, DMIL Rua e DMIL Shopping quando as prioridades correspondentes estiverem presentes nos dados carregados.
 

@@ -9,7 +9,7 @@ O código executável recebido dentro dos anexos não será iniciado nem copiado
 ## Implementação e dados
 
 - Criar uma aplicação estática em HTML/CSS/JavaScript, sem framework nem backend. O `index.html` novo carrega a aplicação nova e a configuração declarativa segura do layout; não executa o JavaScript recebido.
-- Usar SheetJS via CDN para ler XLSX/CSV no navegador. Os arquivos carregados permanecem no IndexedDB do perfil do navegador e são organizados em pastas mensais; não são enviados pelo código do app. O ZIP de exportação é montado localmente. O IndexedDB não é criptografado.
+- Usar SheetJS via CDN para ler XLSX/CSV no navegador. Os arquivos carregados permanecem no IndexedDB do perfil do navegador e são organizados em pastas mensais; não são enviados pelo código do app. Os arquivos Excel mensais são gerados localmente como um único `.xlsx` por pasta, com as planilhas individuais preservadas para ações separadas. O IndexedDB não é criptografado.
 - Manter as cinco páginas do BI, com indicadores, gráficos, tabelas, ordenação de colunas, slicers e seletor de período manual. Implementar seleção cruzada dos pontos dos gráficos e linhas das tabelas, com estado visível e limpeza explícita da seleção.
 - Aplicar apenas as regras de preparação atualmente descritas no código, sem listas privadas de códigos de clientes ou nomes de transportadoras/rotas. Isso pode produzir resultados diferentes do Power BI. A diferença de Aderência de novembro não será resolvida sem confirmação da definição DAX e dos filtros do PBIX; não mudar a fórmula por palpite.
 - Para Segmento, priorizar uma coluna explícita `SEGMENTO` (Distribuição/Varejo) quando existir; sem ela, manter a classificação provisória já existente. Slicers apresentam valores vazios como “(Em branco)”. Zona Prioridade deriva dos códigos de prioridade tratados pela função de mapeamento no código e inclui as categorias da referência quando presentes nos dados.
@@ -50,7 +50,7 @@ O código executável recebido dentro dos anexos não será iniciado nem copiado
 - `report-spec.json` — configuração declarativa não sensível das páginas, visuais, dimensões e campos.
 - `manus-routes.json` — declaração da rota `/` para Preview.
 - `dados/arquivos.json` — manifesto vazio, sem dados da planilha privada.
-- `assets/profarma-logo.png` — logo estático extraído como imagem, sem executar conteúdo embutido.
+- `profarma-logo.png` — logo estático extraído como imagem, sem executar conteúdo embutido.
 - `README.md` — instruções de uso/teste e aviso de privacidade/limites de equivalência.
 - `TODO.md` — estado dos resultados acordados.
 

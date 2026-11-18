@@ -142,7 +142,7 @@ function selectedCategory(c,source) { return !!(state.cross&&state.cross.source=
 function renderColumnChart(v,cats,d,source) {
   const W=v.w,H=v.h-50,pt=8,pb=49,ph=Math.max(20,H-pt-pb),n=Math.max(cats.length,1),step=(W-18)/n,bw=step*.78,mx=Math.max(1,...cats.map(c=>c.base||0));let svg='';
   cats.forEach((c,i)=>{const x=9+step*i+step/2,h=(c.base||0)/mx*ph,y=pt+ph-h,fill=selectedCategory(c,source)?'#94313b':'#D64550';let label=c.label.trim();const mc=Math.max(6,Math.floor(step/7.4)-1);if(label.length>mc)label=label.slice(0,mc-1)+'…';
-    svg+=`<g class="chart-point${selectedCategory(c,source)?' is-selected':''}" data-i="${i}" role="button" tabindex="0" aria-label="${esc(c.label)}: ${formatNum(c.base)}"><rect x="${x-bw/2}" y="${y}" width="${bw}" height="${Math.max(h,1)}" fill="${fill}"/>${c.base>0?`<text x="${x}" y="${h>=18?y+15:y-4}" text-anchor="middle" font-size="13" font-weight="700" fill="${h>=18?'#fff':'#252423'}">${formatNum(c.base)}</text>`:''}<text x="${x}" y="${pt+ph+17}" text-anchor="middle" font-size="11" fill="#777">${esc(c.group)}</text><text x="${x}" y="${pt+ph+34}" text-anchor="middle" font-size="11" fill="#777">${esc(label)}</text></g>`;
+    const labelInside=h>=28,labelY=labelInside?Math.min(pt+ph-5,y+15):Math.max(pt+12,y-6);svg+=`<g class="chart-point${selectedCategory(c,source)?' is-selected':''}" data-i="${i}" role="button" tabindex="0" aria-label="${esc(c.label)}: ${formatNum(c.base)}"><rect x="${x-bw/2}" y="${y}" width="${bw}" height="${Math.max(h,1)}" fill="${fill}"/>${c.base>0?`<text x="${x}" y="${labelY}" text-anchor="middle" font-size="13" font-weight="700" fill="${labelInside?'#fff':'#252423'}">${formatNum(c.base)}</text>`:''}<text x="${x}" y="${pt+ph+17}" text-anchor="middle" font-size="11" fill="#777">${esc(c.group)}</text><text x="${x}" y="${pt+ph+34}" text-anchor="middle" font-size="11" fill="#777">${esc(label)}</text></g>`;
   });
   d.innerHTML=`<div class="chart-title" style="font-size:21px">${esc((v.ttl||'').replace(/\s+/g,' '))}</div><svg width="${W}" height="${H}" role="img" aria-label="${esc(v.ttl||'Gráfico')}">${svg}</svg>`;
   wireChartPoints(d,cats,source);
@@ -155,7 +155,7 @@ function renderChart(v,rows,d,source) {
   const Y=x=>pt+ph-(x-lo)/(hi-lo)*ph,Y2=x=>pt+ph-(x-lo2)/(hi2-lo2)*ph;let bars='',labels='',points=[],priorGroup='';
   cats.forEach((c,i)=>{const x=12+step*i+step/2,base=c.base||0,y=Y(base),bh=Math.max(0,pt+ph-y),rot=n>14||bw<46,fmt=isPct(v.ym)?formatPct:formatNum,fill=colorFor(v.ym,base);
     bars+=`<g class="chart-point${selectedCategory(c,source)?' is-selected':''}" data-i="${i}" role="button" tabindex="0" aria-label="${esc(c.label)}: ${esc(fmt(base))}${c.line!=null?' · '+esc(formatPct(c.line)):''}"><rect x="${x-bw/2}" y="${y}" width="${bw}" height="${Math.max(bh,1)}" fill="${fill}"/>`;
-    const t=fmt(base);if(v.out)labels+=`<text x="${x}" y="${y-5}" text-anchor="middle" font-size="12" font-weight="700">${esc(t)}</text>`;else labels+=`<text transform="translate(${x+(rot?4:0)},${y+(rot?6:15)})${rot?' rotate(-90)':''}" ${rot?'text-anchor="end"':'text-anchor="middle"'} font-size="11" font-weight="700" fill="#fff">${esc(t)}</text>`;
+    const t=fmt(base),inside=!v.out&&bh>=28, safeY=inside?Math.min(pt+ph-5,y+15):Math.max(pt+12,y-6);if(inside){labels+=`<text transform="translate(${x+(rot?4:0)},${safeY})${rot?' rotate(-90)':''}" ${rot?'text-anchor="end"':'text-anchor="middle"'} font-size="11" font-weight="700" fill="#fff">${esc(t)}</text>`;}else{labels+=`<text x="${x}" y="${safeY}" text-anchor="middle" font-size="12" font-weight="700" fill="#252423">${esc(t)}</text>`;}
     if(c.line!=null){points.push([x,Y2(c.line)]);labels+=`<text x="${x}" y="${Y2(c.line)-8}" text-anchor="middle" font-size="11" font-weight="700">${esc(formatPct(c.line))}</text>`;}
     let label=c.label;if(v.k==='col'&&label.length>17)label=label.slice(0,16)+'…';bars+=`<text x="${x}" y="${pt+ph+16}" text-anchor="middle" font-size="${v.k==='col'?11:12}" font-weight="700" fill="#6f7471">${esc(label)}</text>`;
     if(c.group&&c.group!==priorGroup){priorGroup=c.group;bars+=`<text x="${x}" y="${pt+ph+34}" font-size="11" font-weight="700" fill="#666">${esc(c.group)}</text>`;} bars+='</g>';
@@ -206,7 +206,7 @@ function renderSlicer(v,d) {
 function renderVisual(v,index,page) {
   const d=visualElement(v,index);const source=`${state.page}_${index}`;const rows=filteredRows(page.pf,source);
   if(v.t==='text'){d.className='visual text-visual';d.style.color=v.c||'#006a4e';d.style.fontSize=`${(v.sz||14)*1.333}px`;d.style.justifyContent=v.al==='center'?'center':'flex-start';d.textContent=v.tx||'';}
-  else if(v.t==='img'){d.classList.add('img-visual');d.innerHTML='<img src="assets/profarma-logo.png" alt="Profarma">';}
+  else if(v.t==='img'){d.classList.add('img-visual');d.innerHTML='<img src="profarma-logo.png" alt="Profarma">';}
   else if(v.t==='line'){d.style.background='transparent';d.innerHTML='<div class="rule-line"></div>';}
   else if(v.t==='box'){d.style.background='transparent';d.innerHTML='<div class="shape-box"></div>';}
   else if(v.t==='card')renderCard(v,rows,d);
@@ -257,6 +257,7 @@ function monthFolder(name,rows) {
   const dates=[...new Set(rows.map(r=>dateKey(r.DATA_ITINERARIO)).filter(Boolean))];const months=new Set(dates.map(d=>d.slice(0,7)));
   let month=idx;
   if(month<0&&months.size===1){const [y,m]=[...months][0].split('-').map(Number);year=year||String(y);month=m-1;}
+  if(month<0){const stamp=String(name).match(/(20\d{2})(0[1-9]|1[0-2])([0-3]\d)/);if(stamp){year=year||stamp[1];month=Number(stamp[2])-1;}}
   if(month<0)return months.size?'VÁRIOS MESES':'SEM MÊS';
   if(!year){const years=dates.filter(d=>Number(d.slice(5,7))===month+1).map(d=>Number(d.slice(0,4)));if(years.length)year=String(Math.max(...years));}
   return MONTHS[month]+(year?' '+year:'');
@@ -280,6 +281,47 @@ function rebuild() {
 }
 function showToast(message) { const old=$('.toast');old?.remove();const t=document.createElement('div');t.className='toast';t.textContent=message;document.body.appendChild(t);clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.remove(),5000); }
 
+function filePeriod(file) {
+  const dates=(file.rawRows||[]).map(r=>dateKey(r.DATA_ITINERARIO)).filter(Boolean).sort();
+  return dates.length ? {from:dates[0],to:dates[dates.length-1]} : null;
+}
+function individualTitle(file) {
+  const p=filePeriod(file), folder=file.folder||'SEM MÊS';
+  return p ? `ANALISE ${folder} DO DIA ${formatDate(p.from)} ATE ${formatDate(p.to)}` : String(file.name||'itineraries').replace(/\.[^.]+$/,'');
+}
+function workbookRows(files) {
+  const rows=[];
+  for(const f of files) for(const r of (f.rawRows||[])) rows.push({...r});
+  return rows;
+}
+function xlsxBlob(rows, sheetName='itineraries') {
+  if(!window.XLSX) throw new Error('A biblioteca Excel ainda não foi carregada.');
+  const clean=rows.map(row=>Object.fromEntries(Object.entries(row).filter(([k])=>!String(k).startsWith('_'))));
+  const headers=[...new Set(clean.flatMap(r=>Object.keys(r)))];
+  const normalized=clean.map(r=>Object.fromEntries(headers.map(h=>[h,r[h]??''])));
+  const ws=XLSX.utils.json_to_sheet(normalized,{header:headers,skipHeader:false});
+  ws['!cols']=headers.map(h=>({wch:Math.min(38,Math.max(12,String(h).length+2))}));
+  ws['!autofilter']={ref:`A1:${XLSX.utils.encode_col(Math.max(headers.length-1,0))}${Math.max(normalized.length+1,1)}`};
+  ws['!freeze']={xSplit:0,ySplit:1};
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,(sheetName||'itineraries').slice(0,31));
+  return new Blob([XLSX.write(wb,{bookType:'xlsx',type:'array',compression:true})],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+}
+function downloadWorkbook(rows,filename) {
+  if(!rows.length){showToast('Não há linhas para exportar.');return;}
+  const url=URL.createObjectURL(xlsxBlob(rows,'itineraries')),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000);
+}
+function monthFiles(folder) { return state.files.filter(f=>f.folder===folder).sort((a,b)=>(b.lm||0)-(a.lm||0)); }
+function latestRowsForFolder(folder) {
+  const files=monthFiles(folder), owner=new Map();
+  for(const f of files) for(const r of (f.rawRows||[])){const d=dateKey(r.DATA_ITINERARIO);if(d&&!owner.has(d))owner.set(d,f);}
+  const out=[]; for(const f of files) for(const r of (f.rawRows||[])){const d=dateKey(r.DATA_ITINERARIO);if(!d||owner.get(d)===f)out.push(r);}
+  return out;
+}
+function showPreview(file) {
+  const root=$('#modalRoot'), rows=file.rawRows||[], headers=[...new Set(rows.flatMap(r=>Object.keys(r)))].filter(k=>!String(k).startsWith('_')), shown=rows.slice(0,120);
+  root.innerHTML=`<div id="previewModal" role="dialog" aria-modal="true"><div class="preview-box"><div class="settings-head"><span>${esc(individualTitle(file))}</span><button data-action="close-preview" aria-label="Fechar">×</button></div><div class="preview-body"><p>${rows.length.toLocaleString('pt-BR')} linhas · mostrando ${shown.length.toLocaleString('pt-BR')} para visualização.</p><div class="table-wrap"><table class="file-preview"><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${shown.map(r=>`<tr>${headers.map(h=>`<td>${esc(r[h]??'')}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div><div class="settings-foot"><button data-action="download-file" data-name="${esc(file.name)}">Baixar XLSX</button><button data-action="close-preview">Fechar</button></div></div></div>`;
+}
+
 const CRC_TABLE=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xedb88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
 function crc32(bytes){let c=0xffffffff;for(const b of bytes)c=CRC_TABLE[(c^b)&255]^(c>>>8);return(c^0xffffffff)>>>0;}
 function zipBlob(files,folderMode) {
@@ -293,15 +335,18 @@ function zipBlob(files,folderMode) {
 function downloadZip(files,folderMode,filename) { if(!files.length)return;const url=URL.createObjectURL(zipBlob(files,folderMode)),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000); }
 function renderSettings() {
   const root=$('#modalRoot'),folders=[...new Set(state.files.map(f=>f.folder||'SEM MÊS'))].sort((a,b)=>a.localeCompare(b,'pt'));
-  const sections=folders.map(folder=>{const files=state.files.filter(f=>f.folder===folder).sort((a,b)=>a.name.localeCompare(b.name,'pt'));const opts=folders.map(x=>`<option value="${esc(x)}" ${x===folder?'selected':''}>${esc(x)}</option>`).join('');return `<section class="month-folder"><div class="folder-head"><strong>📁 ${esc(folder)}</strong><span class="small-muted">${files.length} arquivo(s)</span><button data-action="zip-month" data-folder="${esc(folder)}">Baixar mês (.zip)</button></div><table class="file-list"><thead><tr><th>Usar</th><th>Arquivo</th><th>Linhas</th><th>Período</th><th>Organizar / ação</th></tr></thead><tbody>${files.map(f=>{const ds=f.rawRows.map(r=>dateKey(r.DATA_ITINERARIO)).filter(Boolean).sort();return `<tr><td><input type="checkbox" data-action="toggle" data-name="${esc(f.name)}" ${f.on?'checked':''}></td><td>${esc(f.name)}</td><td>${f.rawRows.length.toLocaleString('pt-BR')}</td><td>${ds.length?formatDate(ds[0])+' a '+formatDate(ds[ds.length-1]):'—'}</td><td><select aria-label="Mover ${esc(f.name)}" data-action="move" data-name="${esc(f.name)}">${opts}</select> <button data-action="delete" data-name="${esc(f.name)}">Excluir</button></td></tr>`;}).join('')}</tbody></table></section>`;}).join('');
-  root.innerHTML=`<div id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><div class="settings-box"><div class="settings-head"><span id="settingsTitle">⚙ Organizar planilhas por mês</span><button data-action="close" aria-label="Fechar">×</button></div><div class="settings-body"><p>Os arquivos carregados ficam neste navegador. Organize por mês, ative/desative ou exclua planilhas. Para baixar, gere um ZIP de um mês ou de todas as pastas.</p><div class="settings-actions"><button class="primary" data-action="add">+ Adicionar planilhas</button>${state.files.length?'<button data-action="zip-all">Baixar todos os meses (.zip)</button>':''}</div>${sections||'<div class="empty-folder">Nenhuma planilha carregada. Adicione arquivos Excel ou CSV para criar as pastas mensais.</div>'}</div><div class="settings-foot"><button data-action="close">Fechar</button></div></div></div>`;
+  const sections=folders.map(folder=>{const files=monthFiles(folder);return `<section class="month-folder"><div class="folder-head"><strong>📁 ${esc(folder)}</strong><span class="small-muted">${files.length} planilha(s) · dashboard usa a mais recente por data</span><button class="primary" data-action="download-month" data-folder="${esc(folder)}">Baixar ${esc(folder)}.xlsx</button></div><table class="file-list"><thead><tr><th>Usar</th><th>Planilha individual</th><th>Linhas</th><th>Período</th><th>Ações</th></tr></thead><tbody>${files.map(f=>{const ds=filePeriod(f);return `<tr><td><input type="checkbox" data-action="toggle" data-name="${esc(f.name)}" ${f.on?'checked':''}></td><td><strong>${esc(individualTitle(f))}</strong><br><span class="small-muted">origem: ${esc(f.name)}</span></td><td>${(f.rawRows||[]).length.toLocaleString('pt-BR')}</td><td>${ds?formatDate(ds.from)+' a '+formatDate(ds.to):'—'}</td><td><button data-action="view" data-name="${esc(f.name)}">Visualizar</button> <button data-action="download-file" data-name="${esc(f.name)}">Baixar</button> <button data-action="delete" data-name="${esc(f.name)}">Excluir</button></td></tr>`;}).join('')}</tbody></table></section>`;}).join('');
+  root.innerHTML=`<div id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><div class="settings-box"><div class="settings-head"><span id="settingsTitle">⚙ Planilhas e pastas mensais</span><button data-action="close" aria-label="Fechar">×</button></div><div class="settings-body"><p>Os dados ficam neste navegador. Cada mês pode ser baixado como um único arquivo Excel formatado, enquanto as planilhas individuais continuam disponíveis para visualizar, baixar ou excluir.</p><div class="settings-actions"><button class="primary" data-action="add">+ Adicionar planilha</button></div>${sections||'<div class="empty-folder">Nenhuma planilha carregada. Adicione um arquivo Excel ou CSV.</div>'}</div><div class="settings-foot"><button data-action="close">Fechar</button></div></div></div>`;
 }
+
 function closeSettings(){ $('#modalRoot').replaceChildren(); }
 $('#settingsButton').addEventListener('click',renderSettings);
 $('#modalRoot').addEventListener('click',async e=>{if(e.target.id==='settingsModal'||e.target.closest('[data-action="close"]')){closeSettings();return;}const b=e.target.closest('[data-action]');if(!b)return;const action=b.dataset.action;
   if(action==='add'){$('#fileInput').click();return;}
-  if(action==='zip-month'){const files=state.files.filter(f=>f.folder===b.dataset.folder);downloadZip(files,false,b.dataset.folder.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.zip');return;}
-  if(action==='zip-all'){downloadZip(state.files,true,'profarma-todos-os-meses.zip');return;}
+  if(action==='close-preview'){closeSettings();return;}
+  if(action==='download-month'){const folder=b.dataset.folder;downloadWorkbook(latestRowsForFolder(folder),`${folder}.xlsx`);return;}
+  if(action==='view'){const f=state.files.find(x=>x.name===b.dataset.name);if(f)showPreview(f);return;}
+  if(action==='download-file'){const f=state.files.find(x=>x.name===b.dataset.name);if(f)downloadWorkbook(f.rawRows||[],`${individualTitle(f)}.xlsx`);return;}
   if(action==='delete'){if(!confirm(`Excluir ${b.dataset.name} deste navegador?`))return;state.files=state.files.filter(f=>f.name!==b.dataset.name);await idbRemove(b.dataset.name);rebuild();render();renderSettings();return;}
 });
 $('#modalRoot').addEventListener('change',async e=>{const t=e.target;if(t.dataset.action==='move'){const f=state.files.find(x=>x.name===t.dataset.name);if(f){f.folder=t.value;await idbSave(f);renderSettings();}}else if(t.dataset.action==='toggle'){const f=state.files.find(x=>x.name===t.dataset.name);if(f){f.on=t.checked;await idbSave(f);rebuild();render();renderSettings();}}});
