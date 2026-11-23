@@ -1,9 +1,32 @@
 /* Dashboard Profarma: implementação nova baseada somente na configuração declarativa report-spec.json. */
 const $ = (s, r=document) => r.querySelector(s);
-const state = { pages: [], files: [], rows: [], page: 0, from: null, to: null, dateTouched: false, filters: {}, cross: null, openSlicer: null, slicerSearch: '', sort: {}, tablePages: {}, min: null, max: null };
+const state = { pages: [], files: [], rows: [], page: 0, from: null, to: null, dateTouched: false, filters: {}, cross: null, openSlicer: null, slicerSearch: '', sort: {}, tablePages: {}, min: null, max: null, booting: false, restoreTotal: 0, restoreDone: 0 };
 const MONTHS = ['JANEIRO','FEVEREIRO','MARÇO','ABRIL','MAIO','JUNHO','JULHO','AGOSTO','SETEMBRO','OUTUBRO','NOVEMBRO','DEZEMBRO'];
 const DAYS = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
 let toastTimer = 0;
+let xlsxPromise = null;
+let dbPromise = null;
+
+function yieldToBrowser() { return new Promise(resolve => window.requestIdleCallback ? window.requestIdleCallback(resolve, {timeout:50}) : window.setTimeout(resolve, 0)); }
+function ensureXLSX() {
+  if (window.XLSX) return Promise.resolve(window.XLSX);
+  if (xlsxPromise) return xlsxPromise;
+  xlsxPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'xlsx.full.min.js';
+    script.async = true;
+    script.onload = () => window.XLSX ? resolve(window.XLSX) : reject(new Error('A biblioteca Excel não foi inicializada.'));
+    script.onerror = () => {
+      const fallback = document.createElement('script');
+      fallback.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+      fallback.onload = () => window.XLSX ? resolve(window.XLSX) : reject(new Error('A biblioteca Excel não foi inicializada.'));
+      fallback.onerror = () => reject(new Error('Não foi possível carregar a biblioteca de leitura Excel. Verifique sua conexão e tente novamente.'));
+      document.head.appendChild(fallback);
+    };
+    document.head.appendChild(script);
+  }).catch(error => { xlsxPromise = null; throw error; });
+  return xlsxPromise;
+}
 
 function esc(value) { return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
 function fixEncoding(value) {
@@ -159,9 +182,9 @@ function renderChart(v,rows,d,source) {
   const W=v.w,H=v.h-(v.ttl?56:6),pt=28,sy=['NFs em aberto','Valor aberto'].includes(v.ym),pb=cats.some(c=>c.group)?(sy?66:48):34,ph=Math.max(24,H-pt-pb),n=cats.length,step=(W-24)/n,bw=n===1?step*.21:step*(['On Time x Aderência','On Time','Volumetria','Clientes Atendidos'].includes((v.ttl||'').trim())?.83:.76),ax=v.ax||[];
   const lo=Number.isFinite(ax[0])?ax[0]:0,rawMax=Math.max(0,...cats.map(c=>c.base||0)),hi=(Number.isFinite(ax[1])&&ax[1]>lo)?ax[1]:Math.max(1,rawMax*1.15),lo2=Number.isFinite(ax[2])?ax[2]:0,hi2=(Number.isFinite(ax[3])&&ax[3]>lo2)?ax[3]:1;
   const Y=x=>pt+ph-(x-lo)/(hi-lo)*ph,Y2=x=>pt+ph-(x-lo2)/(hi2-lo2)*ph;let bars='',labels='',points=[],groups=[];
-  cats.forEach((c,i)=>{const x=12+step*i+step/2,base=c.base||0,y=Y(base),bh=Math.max(0,pt+ph-y),rot=n>14||bw<46,fmt=isPct(v.ym)?formatPct:v.ym==='Valor aberto'?(x=>'R$ '+formatMoney(x)):formatNum,fill=colorFor(v.ym,base);
+  cats.forEach((c,i)=>{const x=12+step*i+step/2,base=c.base||0,y=Y(base),bh=Math.max(0,pt+ph-y),rot=false,fmt=isPct(v.ym)?formatPct:v.ym==='Valor aberto'?(x=>'R$ '+formatMoney(x)):formatNum,fill=colorFor(v.ym,base);
     bars+=`<g class="chart-point${selectedCategory(c,source)?' is-selected':''}" data-i="${i}" role="button" tabindex="0" aria-label="${esc(c.label)}: ${esc(fmt(base))}${c.line!=null?' · '+esc(formatPct(c.line)):''}"><rect x="${x-bw/2}" y="${y}" width="${bw}" height="${Math.max(bh,1)}" fill="${fill}"/>`;
-    const t=fmt(base),inside=!v.out&&bh>=28, safeY=inside?Math.min(pt+ph-5,y+15):Math.max(pt+12,y-6);if(inside){labels+=`<text transform="translate(${x+(rot?4:0)},${safeY})${rot?' rotate(-90)':''}" ${rot?'text-anchor="end"':'text-anchor="middle"'} font-size="11" font-weight="700" fill="#fff">${esc(t)}</text>`;}else{labels+=`<text x="${x}" y="${safeY}" text-anchor="middle" font-size="12" font-weight="700" fill="#252423">${esc(t)}</text>`;}
+    const t=fmt(base),inside=!v.out&&bh>=28,safeY=inside?Math.min(pt+ph-5,y+15):Math.max(pt+12,y-6);labels+=`<text x="${x}" y="${safeY}" text-anchor="middle" font-size="${inside?'11':'12'}" font-weight="700" fill="${inside?'#fff':'#252423'}">${esc(t)}</text>`;
     if(c.line!=null){points.push([x,Y2(c.line)]);labels+=`<text x="${x}" y="${Y2(c.line)-8}" text-anchor="middle" font-size="11" font-weight="700">${esc(formatPct(c.line))}</text>`;}
     let label=c.label;if(v.k==='col'&&label.length>17)label=label.slice(0,16)+'…';bars+=`<text x="${x}" y="${pt+ph+16}" text-anchor="middle" font-size="${v.k==='col'?11:12}" font-weight="700" fill="#6f7471">${esc(label)}</text>`;
     if(c.group){const gs=groups[groups.length-1];if(gs&&gs.name===c.group)gs.x2=x;else groups.push({name:c.group,x1:x,x2:x,year:String(c.key).slice(0,4)});} bars+='</g>';
@@ -224,6 +247,7 @@ function renderVisual(v,index,page) {
 }
 function updateInfo() {
   const loaded=state.files.length, active=state.files.filter(f=>f.on).length, info=$('#info');
+  if(state.booting){info.textContent=`Restaurando planilhas… ${state.restoreDone}/${state.restoreTotal}. O painel já está disponível e será atualizado progressivamente.`;return;}
   if(!state.rows.length){info.textContent=loaded?`${loaded} arquivo(s) carregado(s); sem registros válidos após os filtros de preparação.`:'Carregue uma planilha para começar.';return;}
   info.textContent=`${state.rows.length.toLocaleString('pt-BR')} linhas válidas · ${active}/${loaded} planilha(s) ativa(s) · ${formatDate(state.from||state.min)} a ${formatDate(state.to||state.max)} · dados neste navegador`;
 }
@@ -253,7 +277,7 @@ function csvRows(text) {
 }
 async function readRows(name,buffer) {
   if(/\.xlsx?$/i.test(name)){
-    if(!window.XLSX)throw new Error('Não foi possível carregar a biblioteca de leitura Excel. Verifique sua conexão e tente novamente.');
+    await ensureXLSX();
     const wb=XLSX.read(buffer,{type:'array',cellDates:true});const ws=wb.Sheets['1']||wb.Sheets[wb.SheetNames[0]];if(!ws)throw new Error('A planilha não contém uma aba legível.');
     return XLSX.utils.sheet_to_json(ws,{defval:'',raw:true,blankrows:false}).map(row=>Object.fromEntries(Object.entries(row).map(([k,v])=>[String(fixEncoding(k)).trim(),typeof v==='string'?fixEncoding(v):v])));
   }
@@ -269,13 +293,17 @@ function monthFolder(name,rows) {
   if(!year){const years=dates.filter(d=>Number(d.slice(5,7))===month+1).map(d=>Number(d.slice(0,4)));if(years.length)year=String(Math.max(...years));}
   return MONTHS[month]+(year?' '+year:'');
 }
-function idbOpen() { return new Promise((resolve,reject)=>{if(!window.indexedDB){reject(new Error('Armazenamento local não disponível neste navegador.'));return;}const req=indexedDB.open('profarma-dashboard-test',1);req.onupgradeneeded=()=>req.result.createObjectStore('files',{keyPath:'name'});req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);}); }
+function idbOpen() {
+  if (dbPromise) return dbPromise;
+  dbPromise = new Promise((resolve,reject)=>{if(!window.indexedDB){reject(new Error('Armazenamento local não disponível neste navegador.'));return;}const req=indexedDB.open('profarma-dashboard-test',1);req.onupgradeneeded=()=>req.result.createObjectStore('files',{keyPath:'name'});req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});
+  return dbPromise;
+}
 async function idbAll() { const db=await idbOpen();return new Promise((resolve,reject)=>{const tx=db.transaction('files','readonly'),req=tx.objectStore('files').getAll();req.onsuccess=()=>resolve(req.result||[]);req.onerror=()=>reject(req.error);}); }
-async function idbSave(file) { const db=await idbOpen();return new Promise((resolve,reject)=>{const tx=db.transaction('files','readwrite');tx.objectStore('files').put({name:file.name,buffer:file.buffer,lm:file.lm,on:file.on,folder:file.folder});tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);}); }
+async function idbSave(file) { const db=await idbOpen();return new Promise((resolve,reject)=>{const tx=db.transaction('files','readwrite');tx.objectStore('files').put({name:file.name,buffer:file.buffer,lm:file.lm,on:file.on,folder:file.folder,rawRows:Array.isArray(file.rawRows)?file.rawRows:null,cacheVersion:1});tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);}); }
 async function idbRemove(name) { const db=await idbOpen();return new Promise((resolve,reject)=>{const tx=db.transaction('files','readwrite');tx.objectStore('files').delete(name);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);}); }
 async function addFiles(fileList) {
   const errors=[];
-  for(const file of fileList){try{const buffer=await file.arrayBuffer(),rows=await readRows(file.name,buffer),f={name:file.name,buffer,lm:file.lastModified||Date.now(),on:true,folder:monthFolder(file.name,rows),rawRows:rows};state.files=state.files.filter(x=>x.name!==f.name);state.files.push(f);await idbSave(f);}catch(e){errors.push(`${file.name}: ${e.message||'erro de leitura'}`);}}
+  for(const file of fileList){try{const buffer=await file.arrayBuffer(),rows=await readRows(file.name,buffer),f={name:file.name,buffer,lm:file.lastModified||Date.now(),on:true,folder:monthFolder(file.name,rows),rawRows:rows};state.files=state.files.filter(x=>x.name!==f.name);state.files.push(f);await idbSave(f);await yieldToBrowser();}catch(e){errors.push(`${file.name}: ${e.message||'erro de leitura'}`);}}
   state.openSlicer=null;rebuild();render();if(errors.length)showToast('Alguns arquivos não foram carregados: '+errors.join(' | '));
 }
 function rebuild() {
@@ -313,8 +341,9 @@ function xlsxBlob(rows, sheetName='itineraries') {
   const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,(sheetName||'itineraries').slice(0,31));
   return new Blob([XLSX.write(wb,{bookType:'xlsx',type:'array',compression:true})],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
 }
-function downloadWorkbook(rows,filename) {
+async function downloadWorkbook(rows,filename) {
   if(!rows.length){showToast('Não há linhas para exportar.');return;}
+  await ensureXLSX();
   const url=URL.createObjectURL(xlsxBlob(rows,'itineraries')),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000);
 }
 function monthFiles(folder) { return state.files.filter(f=>f.folder===folder).sort((a,b)=>(b.lm||0)-(a.lm||0)); }
@@ -351,9 +380,9 @@ $('#settingsButton').addEventListener('click',renderSettings);
 $('#modalRoot').addEventListener('click',async e=>{if(e.target.id==='settingsModal'||e.target.closest('[data-action="close"]')){closeSettings();return;}const b=e.target.closest('[data-action]');if(!b)return;const action=b.dataset.action;
   if(action==='add'){$('#fileInput').click();return;}
   if(action==='close-preview'){closeSettings();return;}
-  if(action==='download-month'){const folder=b.dataset.folder;downloadWorkbook(latestRowsForFolder(folder),`${folder}.xlsx`);return;}
+  if(action==='download-month'){const folder=b.dataset.folder;await downloadWorkbook(latestRowsForFolder(folder),`${folder}.xlsx`);return;}
   if(action==='view'){const f=state.files.find(x=>x.name===b.dataset.name);if(f)showPreview(f);return;}
-  if(action==='download-file'){const f=state.files.find(x=>x.name===b.dataset.name);if(f)downloadWorkbook(f.rawRows||[],`${individualTitle(f)}.xlsx`);return;}
+  if(action==='download-file'){const f=state.files.find(x=>x.name===b.dataset.name);if(f)await downloadWorkbook(f.rawRows||[],`${individualTitle(f)}.xlsx`);return;}
   if(action==='delete'){if(!confirm(`Excluir ${b.dataset.name} deste navegador?`))return;state.files=state.files.filter(f=>f.name!==b.dataset.name);await idbRemove(b.dataset.name);rebuild();render();renderSettings();return;}
 });
 $('#modalRoot').addEventListener('change',async e=>{const t=e.target;if(t.dataset.action==='move'){const f=state.files.find(x=>x.name===t.dataset.name);if(f){f.folder=t.value;await idbSave(f);renderSettings();}}else if(t.dataset.action==='toggle'){const f=state.files.find(x=>x.name===t.dataset.name);if(f){f.on=t.checked;await idbSave(f);rebuild();render();renderSettings();}}});
@@ -404,12 +433,33 @@ async function copyShot(btn) {
     catch(e2){showToast('Não foi possível gerar o print: '+(e2.message||'erro'));}
   } finally { btn.disabled=false;btn.textContent=label; }
 }
+async function restoreFilesProgressively() {
+  const saved=await idbAll();
+  if(!saved.length)return;
+  state.booting=true;state.restoreTotal=saved.length;state.restoreDone=0;render();
+  for(const item of saved){
+    try {
+      const cached=Array.isArray(item.rawRows);
+      const rawRows=cached?item.rawRows:await readRows(item.name,item.buffer);
+      const file={...item,rawRows};
+      state.files.push(file);
+      if(!cached) void idbSave(file).catch(()=>{});
+      state.restoreDone++;
+      if(state.restoreDone===1||state.restoreDone%3===0||state.restoreDone===state.restoreTotal){rebuild();render();}
+      await yieldToBrowser();
+    } catch(e) {
+      state.restoreDone++;
+      showToast(`Não foi possível restaurar ${item.name}: ${e.message||'erro de leitura'}`);
+    }
+  }
+  state.booting=false;rebuild();render();
+}
 async function init() {
   try {
     const response=await fetch('report-spec.json',{cache:'no-store'});if(!response.ok)throw new Error('Não foi possível carregar a configuração visual.');
     const spec=await response.json();state.pages=spec.pages||[];
-    try{for(const saved of await idbAll()){const rawRows=await readRows(saved.name,saved.buffer);state.files.push({...saved,rawRows});}}catch(e){showToast('O armazenamento local não foi restaurado: '+(e.message||'erro'));}
-    rebuild();render();
+    render();
+    try{await restoreFilesProgressively();}catch(e){state.booting=false;render();showToast('O armazenamento local não foi restaurado: '+(e.message||'erro'));}
   } catch(e) { $('#info').textContent=e.message||'Falha ao abrir o dashboard.';showToast(e.message||'Falha ao abrir o dashboard.'); }
 }
 init();
