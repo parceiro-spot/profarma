@@ -17,3 +17,10 @@ A planilha e o PBIX de referência não estão no projeto nem no ZIP. Para não 
 ## Abrir uma cópia local
 
 Sirva esta pasta por HTTP e abra `index.html`. A página carrega `app.js`, `app.css`, `report-spec.json`, o logo em `assets/` e a biblioteca SheetJS por CDN. Abrir diretamente como `file://` pode impedir o carregamento desses recursos.
+
+
+## Novidades desta versão
+- **📋 Copiar print:** botão ao lado do título de cada tela (Visão Geral, Apontamento, Transportador, Rede). Copia a tela inteira para a área de transferência (é só colar com Ctrl+V). Se o navegador bloquear a cópia direta, baixa o PNG.
+- **Tela cheia a 100% de zoom:** o painel passa a ocupar toda a largura da janela (antes só ficava assim a 125%). A barra superior foi removida; a engrenagem e a informação das planilhas ficam na faixa de baixo.
+- **Cores do BI:** os cards seguem as regras condicionais do relatório (Aderência verde a partir de 95%; On time verde a partir de 88%; Apontamento verde só em 100%). Gráficos de pendência em vermelho.
+- **Gráficos:** barras mais largas como no BI, mês centralizado embaixo do grupo (e o ano nas pendências), valores em R$ nas pendências por semana, e TOP 15 com a transportadora acima do nome do motorista.

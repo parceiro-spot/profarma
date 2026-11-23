@@ -56,7 +56,7 @@ function transformRow(input) {
   const result={...r,_dt:dt,_ot:norm(r.ON_TIME),_ce:norm(r.ENTREGA_DENTRO_CERCA),_sl:norm(r.ENTREGA_DENTRO_SLA),_ft:norm(r.LINK_FOTO),_sa:!ap,_vo:num(r.VOLUME),_en:dt+String(r.CODIGO_INTERNO_CLIENTE??''),
     'Semana do Mês':week,'Semana do mes txt':'Sem '+week,'Dia Itinerário':DAYS[day.getDay()],'Ordem Dia':day.getDay()||7,
     SEGMENTO:explicitSegment||([1155,263].includes(num(r.REDE_CLIENTE))?'VAREJO':'DISTRIBUIÇÃO'),'Zona Prioridade':zone(priority),'Operação':operation(priority),
-    'Transp BI':transport,'TP BI':transfer,
+    'Transp BI':/^PARCEIRO\b/i.test(transport)?'PARCEIRO':transport,'TP BI':transfer,
     NOME_MOTORISTA:String(r.NOME_MOTORISTA||'').slice(0,22).toUpperCase(),
     'REDE CONCAT':network+' - '+brand,'CLIENTE CONCAT':String(r.CODIGO_INTERNO_CLIENTE??'')+' - '+String(r.CLIENTE??''),
     'COLUNA APONTAMENTO':ap?'OK':'SEM APONTAMENTO','EMISSAO ABREVIADA':String(r.EMISSAO_DOCUMENTO??'').slice(0,5),VALOR:num(r.VALOR),_occurrence:occurrence};
@@ -115,12 +115,18 @@ function visualElement(v,index) {
   d.style.cssText=`left:${v.x}px;top:${v.y}px;width:${v.w}px;height:${v.h}px;z-index:${v.z||index+1}`;
   return d;
 }
+function ccColor(rules,value){
+  if(value==null||!Number.isFinite(+value))return null;
+  const ops=[(a,b)=>a===b,(a,b)=>a>b,(a,b)=>a>=b,(a,b)=>a<b,(a,b)=>a<=b];
+  for(const [conds,color] of rules){ if(conds.every(([op,t])=>ops[op](+value,t))) return color; }
+  return null;
+}
 function renderCard(v,rows,d) {
-  const m=measure(rows);const value=m[v.m];d.classList.add('card-visual');d.style.color=v.c||'#006a4e';
+  const m=measure(rows);const value=m[v.m];d.classList.add('card-visual');const condMeasure=(v.m==='SemApontComZero'||v.m==='Valor aberto')?'Aderência':v.m;d.style.color=(v.cc&&ccColor(v.cc,m[condMeasure]))||v.c||'#006a4e';
   d.innerHTML=`<div class="card-value">${esc(displayMetric(v.m,value))}</div><div class="card-label">${esc(v.l||'')}</div>`;
   d.title=v.m==='AderênciaComZero'?'Aderência = OK / Total de NFs após filtros; medida DAX do PBIX ainda não foi confirmada.':v.l||'';
 }
-function colorFor(metric,value) { if(metric==='On time')return value>=.88?'#006440':'#D64550'; if(/Volum|Entreg/.test(metric))return '#006440'; return '#744EC2'; }
+function colorFor(metric,value) { if(metric==='On time')return value>=.88?'#006440':'#D64550'; if(/Volum|Entreg/.test(metric))return '#006440'; return '#D64550'; }
 function makeCategories(v,rows) {
   let groups;
   if(v.cat==='H') groups=groupRows(rows,r=>r._dt,(a,b)=>String(a.key).localeCompare(String(b.key)));
@@ -129,9 +135,9 @@ function makeCategories(v,rows) {
   else groups=groupRows(rows,r=>r[v.cat],(a,b)=>String(a.key??'').localeCompare(String(b.key??''),'pt',{numeric:true}));
   let cats=groups.map(g=>{
     const first=g.rows[0]||{};let label=slicerValueLabel(g.key),group='';let values={};
-    if(v.cat==='H'){label=String(Number(g.key.slice(8,10))).padStart(2,'0');const dt=dateObj(g.key);group=dt?MONTHS[dt.getMonth()].slice(0,3).toLowerCase()+' '+dt.getFullYear():'';values={_dt:g.key};}
+    if(v.cat==='H'){label=String(Number(g.key.slice(8,10))).padStart(2,'0');const dt=dateObj(g.key);group=dt?MONTHS[dt.getMonth()].toLowerCase():'';values={_dt:g.key};}
     else if(v.cat==='Dia Itinerário'){label=first['Dia Itinerário']||label;values={'Ordem Dia':g.key};}
-    else if(v.k==='col'){label=first.NOME_MOTORISTA||'(Em branco)';values={NOME_MOTORISTA:first.NOME_MOTORISTA,'Transp BI':first['Transp BI']};}
+    else if(v.k==='col'){label=first.NOME_MOTORISTA||'(Em branco)';group=first['Transp BI']||'';values={NOME_MOTORISTA:first.NOME_MOTORISTA,'Transp BI':first['Transp BI']};}
     else values={[v.cat]:g.key};
     const mm=measure(g.rows);return {key:g.key,label,group,rows:g.rows,base:mm[v.ym],line:v.ym2?mm[v.ym2]:null,values};
   });
@@ -150,16 +156,17 @@ function renderColumnChart(v,cats,d,source) {
 function renderChart(v,rows,d,source) {
   const cats=makeCategories(v,rows); if(!cats.length){d.innerHTML=`<div class="chart-title">${esc(v.ttl||'')}</div><div class="chart-empty">Sem dados para os filtros selecionados</div>`;return;}
   if(v.k==='col'){renderColumnChart(v,cats,d,source);return;}
-  const W=v.w,H=v.h-(v.ttl?56:6),pt=28,pb=cats.some(c=>c.group)?48:34,ph=Math.max(24,H-pt-pb),n=cats.length,step=(W-24)/n,bw=Math.min(step*.62,95),ax=v.ax||[];
+  const W=v.w,H=v.h-(v.ttl?56:6),pt=28,sy=['NFs em aberto','Valor aberto'].includes(v.ym),pb=cats.some(c=>c.group)?(sy?66:48):34,ph=Math.max(24,H-pt-pb),n=cats.length,step=(W-24)/n,bw=n===1?step*.21:step*(['On Time x Aderência','On Time','Volumetria','Clientes Atendidos'].includes((v.ttl||'').trim())?.83:.76),ax=v.ax||[];
   const lo=Number.isFinite(ax[0])?ax[0]:0,rawMax=Math.max(0,...cats.map(c=>c.base||0)),hi=(Number.isFinite(ax[1])&&ax[1]>lo)?ax[1]:Math.max(1,rawMax*1.15),lo2=Number.isFinite(ax[2])?ax[2]:0,hi2=(Number.isFinite(ax[3])&&ax[3]>lo2)?ax[3]:1;
-  const Y=x=>pt+ph-(x-lo)/(hi-lo)*ph,Y2=x=>pt+ph-(x-lo2)/(hi2-lo2)*ph;let bars='',labels='',points=[],priorGroup='';
-  cats.forEach((c,i)=>{const x=12+step*i+step/2,base=c.base||0,y=Y(base),bh=Math.max(0,pt+ph-y),rot=n>14||bw<46,fmt=isPct(v.ym)?formatPct:formatNum,fill=colorFor(v.ym,base);
+  const Y=x=>pt+ph-(x-lo)/(hi-lo)*ph,Y2=x=>pt+ph-(x-lo2)/(hi2-lo2)*ph;let bars='',labels='',points=[],groups=[];
+  cats.forEach((c,i)=>{const x=12+step*i+step/2,base=c.base||0,y=Y(base),bh=Math.max(0,pt+ph-y),rot=n>14||bw<46,fmt=isPct(v.ym)?formatPct:v.ym==='Valor aberto'?(x=>'R$ '+formatMoney(x)):formatNum,fill=colorFor(v.ym,base);
     bars+=`<g class="chart-point${selectedCategory(c,source)?' is-selected':''}" data-i="${i}" role="button" tabindex="0" aria-label="${esc(c.label)}: ${esc(fmt(base))}${c.line!=null?' · '+esc(formatPct(c.line)):''}"><rect x="${x-bw/2}" y="${y}" width="${bw}" height="${Math.max(bh,1)}" fill="${fill}"/>`;
     const t=fmt(base),inside=!v.out&&bh>=28, safeY=inside?Math.min(pt+ph-5,y+15):Math.max(pt+12,y-6);if(inside){labels+=`<text transform="translate(${x+(rot?4:0)},${safeY})${rot?' rotate(-90)':''}" ${rot?'text-anchor="end"':'text-anchor="middle"'} font-size="11" font-weight="700" fill="#fff">${esc(t)}</text>`;}else{labels+=`<text x="${x}" y="${safeY}" text-anchor="middle" font-size="12" font-weight="700" fill="#252423">${esc(t)}</text>`;}
     if(c.line!=null){points.push([x,Y2(c.line)]);labels+=`<text x="${x}" y="${Y2(c.line)-8}" text-anchor="middle" font-size="11" font-weight="700">${esc(formatPct(c.line))}</text>`;}
     let label=c.label;if(v.k==='col'&&label.length>17)label=label.slice(0,16)+'…';bars+=`<text x="${x}" y="${pt+ph+16}" text-anchor="middle" font-size="${v.k==='col'?11:12}" font-weight="700" fill="#6f7471">${esc(label)}</text>`;
-    if(c.group&&c.group!==priorGroup){priorGroup=c.group;bars+=`<text x="${x}" y="${pt+ph+34}" font-size="11" font-weight="700" fill="#666">${esc(c.group)}</text>`;} bars+='</g>';
+    if(c.group){const gs=groups[groups.length-1];if(gs&&gs.name===c.group)gs.x2=x;else groups.push({name:c.group,x1:x,x2:x,year:String(c.key).slice(0,4)});} bars+='</g>';
   });
+  groups.forEach(g=>{const cx=(g.x1+g.x2)/2;labels+=`<text x="${cx}" y="${pt+ph+34}" text-anchor="middle" font-size="11" font-weight="700" fill="#666">${esc(g.name)}</text>`;if(sy)labels+=`<text x="${(12+W-12)/2}" y="${pt+ph+54}" text-anchor="middle" font-size="11" font-weight="700" fill="#666">${esc(g.year)}</text>`;});
   const line=points.length?`<polyline fill="none" stroke="#222" stroke-width="2" stroke-dasharray="6 4" points="${points.map(p=>p.join(',')).join(' ')}"/>`:'';
   d.innerHTML=`${v.ttl?`<div class="chart-title">${esc(v.ttl)}</div>`:''}<svg width="${W}" height="${H}" role="img" aria-label="${esc(v.ttl||'Gráfico')}">${line}${bars}${labels}</svg>`;
   wireChartPoints(d,cats,source);
@@ -233,9 +240,9 @@ function renderTabs() {
 function render() {
   const page=state.pages[state.page];if(!page)return;
   const canvas=$('#canvas');const H=Math.max(...page.v.map(v=>v.y+v.h))+30;canvas.replaceChildren();canvas.style.width=page.w+'px';canvas.style.height=H+'px';canvas.style.background=page.bg||'#fff';
-  if(state.rows.length){page.v.forEach((v,i)=>canvas.appendChild(renderVisual(v,i,page)));}
+  if(state.rows.length){page.v.forEach((v,i)=>canvas.appendChild(renderVisual(v,i,page)));addShotButton(canvas,page);}
   else {const empty=document.createElement('section');empty.id='empty';empty.innerHTML='<h2>Dashboard Profarma</h2><p>Adicione a planilha de operação para carregar os indicadores, filtros e tabelas. A planilha será processada e armazenada somente neste navegador.</p><button type="button" id="emptyUpload">Selecionar planilha</button>';canvas.appendChild(empty);$('#emptyUpload').addEventListener('click',()=>$('#fileInput').click());}
-  const mobile=matchMedia('(max-width:700px)').matches;const scale=mobile?1:Math.min(1,Math.max(.35,(window.innerWidth-16)/page.w));canvas.style.transform=`scale(${scale})`;$('#viewport').style.height=`${H*scale}px`;$('#viewport').style.overflowX=mobile?'auto':'hidden';
+  const mobile=matchMedia('(max-width:700px)').matches;const scale=mobile?1:Math.max(.35,Math.min(2.5,document.documentElement.clientWidth/page.w));canvas.style.transform=`scale(${scale})`;$('#viewport').style.height=`${H*scale}px`;$('#viewport').style.overflowX=mobile?'auto':'hidden';
   renderTabs();updateInfo();
 }
 function csvRows(text) {
@@ -354,6 +361,49 @@ $('#fileInput').addEventListener('change',async e=>{if(e.target.files.length)awa
 let dragCount=0;window.addEventListener('dragenter',e=>{e.preventDefault();dragCount++;$('#dropOverlay').style.display='flex';});window.addEventListener('dragleave',()=>{dragCount=Math.max(0,dragCount-1);if(!dragCount)$('#dropOverlay').style.display='none';});window.addEventListener('dragover',e=>e.preventDefault());window.addEventListener('drop',async e=>{e.preventDefault();dragCount=0;$('#dropOverlay').style.display='none';if(e.dataTransfer.files.length)await addFiles([...e.dataTransfer.files]);});
 document.addEventListener('click',e=>{if(state.openSlicer&&!e.target.closest('.slicer-popup')&&!e.target.closest('.slicer-button')){state.openSlicer=null;render();}});
 window.addEventListener('resize',render);
+
+/* ===== Copiar print da tela atual (vai direto para a área de transferência) ===== */
+const SHOT_HTML_PROPS=['display','position','left','top','right','bottom','width','height','min-width','min-height','max-width','max-height','margin-top','margin-right','margin-bottom','margin-left','padding-top','padding-right','padding-bottom','padding-left','box-sizing','overflow-x','overflow-y','z-index','color','background-color','background-image','border-top-width','border-top-style','border-top-color','border-right-width','border-right-style','border-right-color','border-bottom-width','border-bottom-style','border-bottom-color','border-left-width','border-left-style','border-left-color','border-top-left-radius','border-top-right-radius','border-bottom-left-radius','border-bottom-right-radius','border-collapse','box-shadow','font-family','font-size','font-weight','font-style','line-height','letter-spacing','text-align','text-overflow','text-transform','white-space','vertical-align','flex-direction','flex-wrap','flex-grow','flex-shrink','align-items','justify-content','gap','opacity','object-fit','object-position'];
+const SHOT_SVG_PROPS=['fill','stroke','stroke-width','stroke-dasharray','font-family','font-size','font-weight','font-style','text-anchor','opacity'];
+function addShotButton(canvas,page) {
+  const t=page.v.find(v=>v.t==='text'&&v.al==='left'&&v.y>=40&&v.y<=70)||{x:50,y:59,w:157,h:57};
+  const b=document.createElement('button');b.type='button';b.className='shot-btn';b.dataset.nocapture='1';b.title='Copiar um print desta tela para colar (Ctrl+V) em outro lugar';
+  b.textContent='📋 Copiar print';b.style.left=`${t.x+t.w+10}px`;b.style.top=`${t.y+Math.max(0,(t.h-30)/2)}px`;
+  b.addEventListener('click',e=>{e.stopPropagation();copyShot(b);});canvas.appendChild(b);
+}
+function blobToDataURL(blob){return new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=()=>no(r.error);r.readAsDataURL(blob);});}
+async function pageToBlob() {
+  const canvas=$('#canvas'),W=canvas.offsetWidth,H=canvas.offsetHeight;
+  const clone=canvas.cloneNode(true);
+  const keep=el=>!el.closest('[data-nocapture],.slicer-popup');
+  const src=[canvas,...canvas.querySelectorAll('*')].filter(keep),dst=[clone,...clone.querySelectorAll('*')].filter(keep);
+  src.forEach((s,i)=>{const d=dst[i];if(!d)return;const cs=getComputedStyle(s),svg=s instanceof SVGElement;let css='';
+    for(const p of (svg?SHOT_SVG_PROPS:SHOT_HTML_PROPS)){const v=cs.getPropertyValue(p);if(v)css+=`${p}:${v};`;}
+    d.setAttribute('style',css);});
+  clone.querySelectorAll('[data-nocapture],.slicer-popup').forEach(e=>e.remove());
+  clone.querySelectorAll('input[type=date]').forEach(inp=>{const sp=document.createElement('div');sp.setAttribute('style',inp.getAttribute('style')||'');sp.style.display='flex';sp.style.alignItems='center';sp.textContent=formatDate(inp.value);inp.replaceWith(sp);});
+  for(const img of clone.querySelectorAll('img')){try{const r=await fetch(img.getAttribute('src'));img.setAttribute('src',await blobToDataURL(await r.blob()));}catch{}}
+  clone.setAttribute('style',`position:relative;left:0;top:0;margin:0;width:${W}px;height:${H}px;background:#fff;overflow:hidden;font-family:"Segoe UI",Arial,sans-serif;color:#252423;`);
+  const xhtml=new XMLSerializer().serializeToString(clone);
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><foreignObject x="0" y="0" width="${W}" height="${H}">${xhtml}</foreignObject></svg>`;
+  const img=new Image();await new Promise((ok,no)=>{img.onload=ok;img.onerror=()=>no(new Error('não consegui desenhar a tela'));img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);});
+  const k=Math.min(2,Math.max(1,window.devicePixelRatio||1)),cv=document.createElement('canvas');cv.width=Math.round(W*k);cv.height=Math.round(H*k);
+  const ctx=cv.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);ctx.scale(k,k);ctx.drawImage(img,0,0);
+  return await new Promise((ok,no)=>cv.toBlob(b=>b?ok(b):no(new Error('falha ao gerar a imagem')),'image/png'));
+}
+function downloadBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000);}
+async function copyShot(btn) {
+  const label='📋 Copiar print',pageName=(state.pages[state.page]?.n||'tela').toLowerCase();
+  btn.disabled=true;btn.textContent='Copiando…';
+  try {
+    const promise=pageToBlob();
+    if(navigator.clipboard&&window.ClipboardItem){await navigator.clipboard.write([new ClipboardItem({'image/png':promise})]);showToast('✔ Print copiado! É só colar (Ctrl+V).');}
+    else{downloadBlob(await promise,`print-${pageName}.png`);showToast('Este navegador não permite copiar imagem direto; o print foi baixado.');}
+  } catch(e) {
+    try{downloadBlob(await pageToBlob(),`print-${pageName}.png`);showToast('O navegador bloqueou a cópia direta; baixei o print em PNG.');}
+    catch(e2){showToast('Não foi possível gerar o print: '+(e2.message||'erro'));}
+  } finally { btn.disabled=false;btn.textContent=label; }
+}
 async function init() {
   try {
     const response=await fetch('report-spec.json',{cache:'no-store'});if(!response.ok)throw new Error('Não foi possível carregar a configuração visual.');
