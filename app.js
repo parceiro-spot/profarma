@@ -368,7 +368,7 @@ const SHOT_SVG_PROPS=['fill','stroke','stroke-width','stroke-dasharray','font-fa
 function addShotButton(canvas,page) {
   const t=page.v.find(v=>v.t==='text'&&v.al==='left'&&v.y>=40&&v.y<=70)||{x:50,y:59,w:157,h:57};
   const b=document.createElement('button');b.type='button';b.className='shot-btn';b.dataset.nocapture='1';b.title='Copiar um print desta tela para colar (Ctrl+V) em outro lugar';
-  b.textContent='📋 Copiar print';b.style.left=`${t.x+t.w+10}px`;b.style.top=`${t.y+Math.max(0,(t.h-30)/2)}px`;
+  b.textContent='📷';b.setAttribute('aria-label','Copiar print desta tela');b.style.left=`${t.x+t.w+10}px`;b.style.top=`${t.y+Math.max(0,(t.h-30)/2)}px`;
   b.addEventListener('click',e=>{e.stopPropagation();copyShot(b);});canvas.appendChild(b);
 }
 function blobToDataURL(blob){return new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=()=>no(r.error);r.readAsDataURL(blob);});}
@@ -393,8 +393,8 @@ async function pageToBlob() {
 }
 function downloadBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000);}
 async function copyShot(btn) {
-  const label='📋 Copiar print',pageName=(state.pages[state.page]?.n||'tela').toLowerCase();
-  btn.disabled=true;btn.textContent='Copiando…';
+  const label='📷',pageName=(state.pages[state.page]?.n||'tela').toLowerCase();
+  btn.disabled=true;btn.textContent='…';
   try {
     const promise=pageToBlob();
     if(navigator.clipboard&&window.ClipboardItem){await navigator.clipboard.write([new ClipboardItem({'image/png':promise})]);showToast('✔ Print copiado! É só colar (Ctrl+V).');}
